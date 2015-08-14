@@ -1,0 +1,43 @@
+html{
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+    min-height: 100%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+.main-content {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.main-content > .main-title {
+    padding: 60px 15px;
+    margin-bottom: 60px;
+    color: inherit;
+    text-align: center;
+}
+
+.main-title > h1 {
+    font-size: 3.5em;
+}
+
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    background-color: #efefef;
+    text-align: center;
+}
