@@ -1,3 +1,4 @@
-<?php 
-require 'vendor/autoload.php';
-require 'app/system/App.php';
+<?php
+require 'app/config/autoload.php';
+
+App::$app->run();

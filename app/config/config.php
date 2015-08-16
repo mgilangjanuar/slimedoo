@@ -1,7 +1,10 @@
 <?php
 
 $config = [
-    'url' => 'http://localhost:8888/slimedoo/',
+    'dir' => '/slimedoo',
+    'name' => 'SliMedoo Framework v2',
+    'defaultFunction' => 'actionIndex',
+    'timezone' => 'Asia/Jakarta',
     'db'  => [
         'database_type' => 'sqlite',
         'database_file' => 'app/config/database/db.sqlite'
