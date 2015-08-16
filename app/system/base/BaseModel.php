@@ -59,6 +59,15 @@ class BaseModel extends App
         
     }
 
+    public static function find($where=[])
+    {
+        $class = static::className();
+        $class = new $class;
+        $class->where($where);
+        return $class;
+
+    }
+
     public function tableName()
     {
         return null;
@@ -250,15 +259,6 @@ class BaseModel extends App
             }
         }
         return false;
-    }
-
-    public static function find($where=[])
-    {
-        $class = static::className();
-        $class = new $class;
-        $class->where($where);
-        return $class;
-
     }
 
     public function where($where=[])

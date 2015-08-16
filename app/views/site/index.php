@@ -13,7 +13,7 @@ $this->title = App::config()->name
         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
         consequat.
     </p>
-    <?= Html::a('Say Hai!', [], ['class' => 'btn btn-success btn-lg', 'id' => 'haiii']) ?>
+    <?= Html::a($hai, [], ['class' => 'btn btn-success btn-lg', 'id' => 'haiii']) ?>
 </div>
 
 <div class="row">

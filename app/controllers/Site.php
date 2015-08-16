@@ -7,7 +7,9 @@ class Site extends \BaseController
 {
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'hai' => 'Hello, World!'
+        ]);
     }
 
     // You can override this method for custom routes

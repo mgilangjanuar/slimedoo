@@ -10,7 +10,7 @@ class Book extends \BaseModel
 
     public function fields()
     {
-        return ['id', 'title', 'writer'];
+        return ['title', 'writer'];
     }
 
     public function rules()
