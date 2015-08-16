@@ -5,11 +5,6 @@ $this->title = App::config()->name
 
 ?>
 
-<form method="post">
-    <input type="text" name="name" value="<?= isset($_POST['name']) ? $_POST['name'] : '' ?>">
-    <button>submit</button>
-</form>
-
 <div class="main-title">
     <h1><?= $this->title ?></h1>
     <p>

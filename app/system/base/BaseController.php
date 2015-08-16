@@ -41,11 +41,10 @@ class BaseController extends App
     {
         $className = str_replace('\\', '/', static::className());
         $className = str_replace('app/controllers/', '', $className);
-        $className = str_replace('Controller', '', $className);
         return $this->dashesFormat($className);
     }
 
-    public function dashesFormat($value)
+    protected function dashesFormat($value)
     {
         // http://stackoverflow.com/questions/10507789/camelcase-to-dash-two-capitals-next-to-each-other
         return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $value));
@@ -66,5 +65,25 @@ class BaseController extends App
     public function siteUrl($url='')
     {
         return static::url($this->viewDir() . ($url != null ? '/' : '') . $url);
+    }
+
+    /** 
+    * Request get Http method.
+    * @param string $value
+    * @return [] or string
+    */ 
+    public function get($value='')
+    {
+        return static::$app->request->get($value);
+    }
+
+    /** 
+    * Request post Http method.
+    * @param string $value
+    * @return [] or string
+    */ 
+    public function post($value='')
+    {
+        return static::$app->request->post($value);
     }
 }

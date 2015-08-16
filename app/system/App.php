@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Cosmic class
+* App class.
 */
 class App
 {

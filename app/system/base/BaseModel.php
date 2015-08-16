@@ -38,7 +38,7 @@ class BaseModel extends App
         }
     }
 
-    public function canGetAttribute($key)
+    protected function canGetAttribute($key)
     {
         $attribute = 'get' . $key;
         if (method_exists($this, $attribute)) {
@@ -48,7 +48,7 @@ class BaseModel extends App
         
     }
 
-    public function canSetAttribute($key, $value)
+    protected function canSetAttribute($key, $value)
     {
         $attribute = 'set' . $key;
         if (method_exists($this, $attribute)) {
@@ -75,13 +75,17 @@ class BaseModel extends App
         if (array_key_exists($attribute, $labels)) {
             return $labels[$attribute];
         } elseif (array_key_exists($attribute, $this->_cols)) {
-            // http://stackoverflow.com/questions/5546120/php-capitalize-after-dash
-            return str_replace('_', ' ', preg_replace_callback('/(\w+)/g', create_function('$m','return ucfirst($m[1]);'), $attribute));
+            if ($attribute == 'id') {
+                return 'ID';
+            } else {
+                // http://stackoverflow.com/questions/5546120/php-capitalize-after-dash
+                return str_replace('_', ' ', preg_replace_callback('/(\w+)/g', create_function('$m','return ucfirst($m[1]);'), $attribute));
+            }
         } elseif (method_exists($this, 'get' . $attribute)) {
             // http://stackoverflow.com/questions/6254093/how-to-parse-camel-case-to-human-readable-string
             return ucwords(preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $attribute));
         }
-        return false;
+        return $attribute . ' field';
     }
 
     public function attributeLabels()
@@ -140,39 +144,50 @@ class BaseModel extends App
         ];
     }
 
+    /**
+    * Load custom rule method(s) and adding to Validator.
+    * example method like:
+    *
+    * public function ruleAlwaysFail() {
+    *     return [
+    *         'message' => 'Everything you do is wrong. You fail.',
+    *         'function' => function($field, $value, [] $params) {return false;},
+    *     ];
+    * }
+    */
+    protected function loadAllRuleMethods()
+    {
+        foreach (get_class_methods($this) as $funcRule) {
+            if (substr($funcRule, 0, 4) == 'rule' && $funcRule != 'rules') {
+                Validator::addRule(lcfirst(substr($funcRule, 4)), $this->$funcRule()['function'], $this->$funcRule()['message']);
+            }
+        }
+    }
+
     public function validate()
     {
-        /**
-        * Load custom rule method(s) and adding to Validator.
-        * example method like:
-        *
-        * public function ruleAlwaysFail() {
-        *     return [
-        *         'message' => 'Everything you do is wrong. You fail.',
-        *         'function' => function($field, $value, array $params) {return false;},
-        *     ];
-        * }
-        */
-        foreach (get_class_methods($this) as $func) {
-            if (substr($func, 0, 4) == 'rule' && $func != 'rules') {
-                Validator::addRule(lcfirst(substr($func, 4)), $this->$func()['function'], $this->$func()['message']);
+        $this->loadAllRuleMethods();
+
+        if ($this->isNewRecord()) {
+            $datas = $this->_cols;
+        } else {
+            $datas = App::db()->get($this->tableName(), '*', $this->_where);
+        }
+
+        foreach (get_class_methods($this) as $funcGet) {
+            if (substr($funcGet, 0, 3) == 'get') {
+                $datas[lcfirst(substr($funcGet, 3))] = $this->$funcGet();
             }
         }
 
-        $validator = new Validator($this->_cols);
-        if (! $this->isNewRecord()) {
-            $validator = new Validator(App::db()->get($this->tableName(), '*', $this->_where));
-        }
+        $validator = new Validator($datas);
+        
         foreach ($this->rules() as $key => $value) {
             if (array_key_exists($key, $this->messages())) {
                 $validator->rule($key, $value)->message($this->messages()[$key]);
                 $labels = [];
                 foreach ($value as $key1) {
-                    if ($this->attributeLabel($key1) === false) {
-                        $labels[$key1] = 'This field';
-                    } else {
-                        $labels[$key1] = $this->attributeLabel($key1);
-                    }
+                    $labels[$key1] = $this->attributeLabel($key1);
                 }
                 $validator->labels($labels);
             } else {
@@ -237,10 +252,12 @@ class BaseModel extends App
         return false;
     }
 
-    public static function find()
+    public static function find($where=[])
     {
         $class = static::className();
-        return new $class;
+        $class = new $class;
+        $class->where($where);
+        return $class;
 
     }
 
