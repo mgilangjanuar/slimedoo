@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <?php foreach (App::autoload('web/assets', '.css', true) as $__css): ?>
-        <link rel="stylesheet" href="<?= $__css ?>">
-    <?php endforeach ?>
+    <?= \Assets::load('css') ?>
 
 </head>
 <body>
@@ -66,9 +64,7 @@
 
     </div>
 
-    <?php foreach (App::autoload('web/assets', '.js', true) as $__js): ?>
-        <script src="<?= $__js ?>"></script>
-    <?php endforeach ?>
+    <?= \Assets::load('js') ?>
 
 </body>
 </html>

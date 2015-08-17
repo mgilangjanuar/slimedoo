@@ -3,6 +3,7 @@
         "slim/slim": "^2.6",
         "catfan/medoo": "^0.9.8",
         "vlucas/valitron": "^1.2",
-        "ptejada/uflex": "1.*"
+        "ptejada/uflex": "1.*",
+        "phpmailer/phpmailer": "^5.2"
     }
 }

@@ -1,8 +1,16 @@
 <?php
 
-use \helpers\Html;
-$this->title = App::config()->name 
+use \helpers\BaseHtml;
+$this->title = App::config()->name;
 
+?>
+
+<?php
+$to = "mgilangjanuar@gmail.com";
+$subject = "My subject";
+$txt = "Hello world!";
+
+mail($to,$subject,$txt);
 ?>
 
 <div class="main-title">
@@ -13,7 +21,7 @@ $this->title = App::config()->name
         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
         consequat.
     </p>
-    <?= Html::a($hai, [], ['class' => 'btn btn-success btn-lg', 'id' => 'haiii']) ?>
+    <?= BaseHtml::a($hai, $this->siteUrl(['index']), ['class' => 'btn btn-success btn-lg', 'id' => 'haiii']) ?>
 </div>
 
 <div class="row">

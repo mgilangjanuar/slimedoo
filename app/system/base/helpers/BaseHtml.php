@@ -1,8 +1,9 @@
 <?php 
 namespace helpers;
+
 use \App;
 
-class Html extends App
+class BaseHtml extends App
 {
     protected static function buildOptions($options=[])
     {

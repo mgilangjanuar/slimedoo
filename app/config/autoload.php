@@ -7,7 +7,7 @@ require 'app/system/App.php';
 
 use \App;
 
-App::init(new \Slim\Slim);
+App::init(new \Slim\Slim, new \ptejada\uFlex\User, new \PHPMailer);
 
 date_default_timezone_set(App::config()->timezone);
 

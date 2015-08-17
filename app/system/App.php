@@ -10,6 +10,13 @@ class App
     */
     public static $app;
 
+    /**
+    * Object of \ptejada\uFlex\User
+    */
+    public static $user;
+
+    protected static $mail;
+
     protected static $url = '';
 
     protected static $db = [];
@@ -18,11 +25,20 @@ class App
     * Main function for initialize this class.
     * @param \Slim\Slim
     */ 
-    public static function init(\Slim\Slim $slim)
+    public static function init(\Slim\Slim $slim, \ptejada\uFlex\User $user, \PHPMailer $mail)
     {
-        static::$app = $slim;
-        static::$url = static::config()->dir;
-        static::$db  = static::config()->db;
+        static::$url    = static::config()->dir;
+        static::$db     = static::config()->db;
+        static::$user   = $user;
+        static::$app    = $slim;
+        static::$mail   = $mail;
+
+        static::$user->config->database->host       = static::config()->db['server'];
+        static::$user->config->database->user       = static::config()->db['username'];
+        static::$user->config->database->password   = static::config()->db['password'];
+        static::$user->config->database->name       = static::config()->db['database_name'];
+
+        static::$user->start();
     }
 
     /** 
@@ -45,6 +61,11 @@ class App
         return (object) $params;
     }
 
+    public static function mail()
+    {
+        require 'app/config/mail.php';
+        
+    }
 
     /** 
     * Get medoo object for database communication.
@@ -55,6 +76,14 @@ class App
         return new medoo(static::$db);
     }
 
+    public static function role($value='')
+    {
+        if ($value == null) {
+            return static::config()->role;
+        }
+        return array_flip(static::config()->role)[$value];
+    }
+
     /** 
     * Get absolute URL.
     * @param $value=''
@@ -63,6 +92,19 @@ class App
     public static function url($value='')
     {
         return 'http://' . $_SERVER['HTTP_HOST'] . static::$url . ($value != null ? '/' : '') . $value;
+    }
+
+    /** 
+    * For redirect to another page or URL.
+    * @param $url=''
+    */ 
+    public static function redirectTo($url='')
+    {
+        if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0 || strpos($url, 'www.') === 0) {
+            return static::$app->response->redirect($url);
+        } else {
+            return static::$app->response->redirect(static::url($url));
+        }
     }
 
     /** 

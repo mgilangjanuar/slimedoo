@@ -5,10 +5,6 @@ $config = [
     'name' => 'SliMedoo Framework v2',
     'defaultFunction' => 'actionIndex',
     'timezone' => 'Asia/Jakarta',
-    // 'db'  => [
-    //     'database_type' => 'sqlite',
-    //     'database_file' => 'app/config/database/db.sqlite'
-    // ],
     'db' => [
         'database_type' => 'mysql',
         'database_name' => 'slimedoo',
@@ -17,4 +13,10 @@ $config = [
         'password' => 'root',
         'charset' => 'utf8',
      ],
+     'role' => [
+       'theCreator',
+       'admin',
+       'user',
+       'guest',
+    ]
 ];
