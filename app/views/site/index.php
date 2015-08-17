@@ -5,14 +5,6 @@ $this->title = App::config()->name;
 
 ?>
 
-<?php
-$to = "mgilangjanuar@gmail.com";
-$subject = "My subject";
-$txt = "Hello world!";
-
-mail($to,$subject,$txt);
-?>
-
 <div class="main-title">
     <h1><?= $this->title ?></h1>
     <p>
