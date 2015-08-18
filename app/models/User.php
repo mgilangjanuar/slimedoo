@@ -13,33 +13,55 @@ class User extends \BaseModel
 
     public function fields()
     {
-        return ['ID', 'Username', 'Password', 'Email', 'Activated', 'Confirmation', 'RegDate', 'LastLogin', 'GroupID'];
+        return ['Username', 'Password', 'Email', 'Password2', 'Email2'];
     }
 
     public function rules()
     {
-        return [
-            [['Username', 'Password', 'Email'], 'required'],
-            [['Email'], 'email'],
+        $rules = [
+            [['Email', 'Email2'], 'email'],
             [['RegDate', 'LastLogin', 'GroupID', 'Activated'], 'integer'],
             [['Activated'], 'lengthMax', 1],
             [['GroupID'], 'lengthMax', 2],
+            [['Email2'], 'equals', 'Email'],
+            [['Password2'], 'equals', 'Password'],
         ];
+        $rules[] = $this->scenario;
+        return $rules;
+    }
+
+    public function scenario($value)
+    {
+        if ($value == 'login') {
+            $this->scenario = [['Username', 'Password'], 'required'];
+        } elseif ($value == 'register') {
+            $this->scenario = [['Username', 'Password', 'Email', 'Password2'], 'required'];
+        } elseif ($value == 'reset-password') {
+            $this->scenario = [['Email'], 'required'];
+        } elseif ($value == 'new-password') {
+            $this->scenario = [['Password', 'Password2'], 'required'];
+        }
     }
 
     public function attributeLabels()
     {
         return [
-            'ID' => 'ID',
             'Username' => 'Username',
             'Password' => 'Password',
+            'Password2' => 'Password Confirmation',
             'Email' => 'Email',
-            'Activated' => 'Activated',
-            'Confirmation' => 'Confirmation',
-            'RegDate' => 'RegDate',
-            'LastLogin' => 'LastLogin',
-            'GroupID' => 'GroupID',
+            'Email2' => 'Email Confirmation',
         ];
+    }
+
+    public function getPassword2()
+    {
+        return $this->Password;
+    }
+
+    public function setPassword2($pass)
+    {
+        $this->password2 = $pass;
     }
 
     public function register($request, $activation=false)
@@ -48,7 +70,7 @@ class User extends \BaseModel
             if (User::find()->count() == null) {
                 $request['GroupID'] = 0;
             } else {
-                $request['GroupID'] = 2;
+                $request['GroupID'] = 1;
             }
             $input = new Collection($request);
             $input->filter('Username', 'Email', 'Password', 'GroupID');
@@ -71,27 +93,39 @@ class User extends \BaseModel
     {
         if ($request != null) {
             $input = new Collection($request);
-            return App::$user->resetPassword($input->Email);
+            $user = App::$user->resetPassword($input->Email);
+            if ($user != null) {
+                App::$mail->addAddress($user->Email, $user->Username);
+                App::$mail->Subject = 'Password Recovery';
+                App::$mail->Body    = 'Click this link for change password ' . App::url('site/new-password?c=' . $user->Confirmation);
+                if (App::$mail->send()) {
+                    return true;
+                } else {
+                    echo 'Message could not be sent.';
+                    echo 'Mailer Error: ' . App::$mail->ErrorInfo;
+                    die();
+                }
+            }
         }
         return false;
     }
 
-    public function newPassword($request)
+    public function newPassword($request, $hash='')
     {
         if ($request != null) {
             $input = new Collection($request);
-            $hash = $input->c;
             if (!App::$user->isSigned() and $hash) {
                 App::$user->newPassword($hash, [
                     'Password'  => $input->Password,
+                    'Password2'  => $input->Password2,
                 ]);
-                return 'login';
             } else {
                 App::$user->update([
                     'Password'  => $input->Password,
+                    'Password2'  => $input->Password2,
                 ]);
-                return 'profile';
             }
+            return true;
         }
         return false;
     }

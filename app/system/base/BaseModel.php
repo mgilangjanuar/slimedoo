@@ -5,6 +5,8 @@ use \Valitron\Validator;
 
 class BaseModel extends App
 {
+    public $scenario = [];
+    
     protected $_cols = [];
 
     protected $_where = [];
@@ -19,6 +21,12 @@ class BaseModel extends App
             $this->_cols = array_flip($this->fields());
             foreach ($this->_cols as $key => $value) {
                 $this->_cols[$key] = isset($_POST[$key]) ? $_POST[$key] : null;
+            }
+            foreach (get_class_methods($this) as $func) {
+                if (substr($func, 0, 3) == 'set') {
+                    $attribute = lcfirst(substr($func, 3));
+                    $this->$attribute = isset($_POST[$attribute]) ? $_POST[$attribute] : null;
+                }
             }
         }
     }
@@ -76,7 +84,7 @@ class BaseModel extends App
                 return 'ID';
             } else {
                 // http://stackoverflow.com/questions/5546120/php-capitalize-after-dash
-                return str_replace('_', ' ', preg_replace_callback('/(\w+)/g', create_function('$m','return ucfirst($m[1]);'), $attribute));
+                return str_replace('_', ' ', preg_replace_callback('/(\w+)/', create_function('$m','return ucfirst($m[1]);'), $attribute));
             }
         } elseif (method_exists($this, 'get' . $attribute)) {
             // http://stackoverflow.com/questions/6254093/how-to-parse-camel-case-to-human-readable-string

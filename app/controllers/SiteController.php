@@ -18,7 +18,8 @@ class SiteController extends \BaseController
     public function actionLogin()
     {
         $model = new User;
-        if ($this->post()) {
+        $model->scenario('login');
+        if ($this->post() && $model->validate()) {
             App::$user->login($this->post('Username'), $this->post('Password'), 0);
             if (App::$user->isSigned()) {
                 return $this->redirect(['index']);
@@ -34,10 +35,11 @@ class SiteController extends \BaseController
     public function actionRegister()
     {
         $model = new User;
-        if ($this->post()) {
-            if ($model->validate() && $model->register($this->post())) {
+        $model->scenario('register');
+        if ($this->post() && $model->validate()) {
+            if ($model->register($this->post())) {
                 return $this->redirect(['login']);
-            } elseif ($model->validate() && ! $model->register($this->post())) {
+            } else {
                 $this->alert = ['danger' => App::$user->log->getErrors()[0]];
             }
         }
@@ -48,18 +50,43 @@ class SiteController extends \BaseController
 
     public function actionResetPassword()
     {
-        
+        $model = new User;
+        $model->scenario('reset-password');
+        if ($this->post() && $model->validate()) {
+            if ($model->resetPassword($this->post())) {
+                return $this->redirect(['new-password']);
+            } else {
+                $this->alert = ['danger' => App::$user->log->getErrors()[0]];
+            }
+        }
+        return $this->render('reset-password', [
+            'model' => $model
+        ]);
     }
 
-    public function actionNewPassword($token)
+    public function actionNewPassword()
     {
-        
+        $model = new User;
+        $model->scenario('new-password');
+        if ($this->post() && $model->validate()) {
+            if ($model->newPassword($this->post(), $this->get('c'))) {
+                if (App::$user->isSigned()) {
+                    App::$user->logout();
+                }
+                return $this->redirect(['login']);
+            } else {
+                $this->alert = ['danger' => App::$user->log->getErrors()[0]];
+            }
+        }
+        return $this->render('new-password', [
+            'model' => $model
+        ]);
     }
 
     public function actionLogout()
     {
         App::$user->logout();
-        return $this->redirect(['index']);
+        return $this->redirect(['login']);
     }
 
     // This optional. Only override this method for custom routes.

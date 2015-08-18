@@ -1,5 +1,5 @@
 <?php
-    $this->title = 'Register';
+    $this->title = 'New Password';
     use \helpers\Form;
 ?>
 
@@ -12,8 +12,6 @@
 
     <?php $form = new Form ?>
     <?php $form->begin() ?>
-        <?php $form->inputText($model, 'Username') ?>
-        <?php $form->inputText($model, 'Email') ?>
         <?php $form->password($model, 'Password') ?>
         <?php $form->password($model, 'Password2') ?>
         <?php $form->submitButton('Submit') ?>

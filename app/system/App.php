@@ -15,7 +15,10 @@ class App
     */
     public static $user;
 
-    protected static $mail;
+    /**
+    * Object of \PHPMailer
+    */
+    public static $mail;
 
     protected static $db = [];
 
@@ -34,8 +37,19 @@ class App
         static::$user->config->database->user       = static::config()->db['username'];
         static::$user->config->database->password   = static::config()->db['password'];
         static::$user->config->database->name       = static::config()->db['database_name'];
-
         static::$user->start();
+
+        require 'app/config/mail.php';
+        static::$mail->isSMTP();
+        static::$mail->Host         = $mail['Host'];
+        static::$mail->SMTPAuth     = $mail['SMTPAuth'];
+        static::$mail->Username     = $mail['Username'];
+        static::$mail->Password     = $mail['Password'];
+        static::$mail->SMTPSecure   = $mail['SMTPSecure'];
+        static::$mail->Port         = $mail['Port'];
+        static::$mail->From         = $mail['From'];
+        static::$mail->FromName     = $mail['FromName'];
+        static::$mail->isHTML(true);
     }
 
     /** 
@@ -56,27 +70,6 @@ class App
     {
         require 'app/config/params.php';
         return (object) $params;
-    }
-
-    /**
-    * Setting mail from object \PHPMailer and return that object.
-    * @return \PHPMailer
-    */
-    public static function mail()
-    {
-        require 'app/config/mail.php';
-        static::$mail->isSMTP();
-        static::$mail->Host = $mail['Host'];
-        static::$mail->SMTPAuth = $mail['SMTPAuth'];
-        static::$mail->Username = $mail['Username'];
-        static::$mail->Password = $mail['Password'];
-        static::$mail->SMTPSecure = $mail['SMTPSecure'];
-        static::$mail->Port = $mail['Port'];
-        static::$mail->From = $mail['From'];
-        static::$mail->FromName = $mail['FromName'];
-        static::$mail->isHTML(true);
-        return static::$mail;
-
     }
 
     /** 

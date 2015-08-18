@@ -1,12 +1,13 @@
 <?php 
 
+// gmail default configuration
 $mail = [
-    'Host' => 'smtp1.example.com;smtp2.example.com',
+    'Host' => 'smtp.gmail.com',
     'SMTPAuth' => true,
-    'Username' => 'user@example.com',
-    'Password' => 'secret',
+    'Username' => 'user@gmail.com',
+    'Password' => 'pass',
     'SMTPSecure' => 'tls',
     'Port' => '587',
-    'From' => 'from@example.com',
+    'From' => 'no-reply@slimedoo.com',
     'FromName' => 'Admin SliMedoo Framework v2',
 ];

@@ -14,9 +14,8 @@ $config = [
         'charset' => 'utf8',
      ],
      'role' => [
-       'theCreator',
-       'admin',
-       'user',
-       'guest',
+       'theCreator', // role for user first register
+       'user', // default role
+       'admin', 
     ]
 ];
