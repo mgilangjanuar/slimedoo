@@ -47,4 +47,14 @@ class BaseHtml extends App
         return '<img src="' . static::urlTo($url) . '"' . static::buildOptions($options) . '>';
     }
 
+    public static function alert($type='', $message='')
+    {
+        if ($type != null && $message != null) {
+            return '<div class="alert alert-dismissible alert-' . $type . '">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                ' . $message . '
+            </div>';
+        }
+    }
+
 }

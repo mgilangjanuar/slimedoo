@@ -40,9 +40,11 @@
                 <li>
                     <a href="#">Services</a>
                 </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
+                <?php if (App::$user->isSigned()): ?>
+                    <li>
+                        <a href="<?= App::url('site/logout') ?>">Logout (<?= App::$user->Username ?>)</a>
+                    </li>
+                <?php endif ?>
             </ul>
         </div>
 
@@ -50,6 +52,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 main-content">
+                        <?= $this->alert() ?>
                         <?php require $__content; ?>
                         <title><?= $this->title ?> :: <?= App::config()->name ?></title>
                     </div>

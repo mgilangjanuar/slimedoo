@@ -11,6 +11,8 @@ class BaseModel extends App
 
     protected $_errors = [];
 
+    protected $_join = [];
+
     public function __construct()
     {
         if ($this->tableName() != null && $this->fields() != null) {
@@ -23,40 +25,26 @@ class BaseModel extends App
 
     public function __get($key)
     {
+        $attribute = 'get' . $key;
         if (array_key_exists($key, $this->_cols)) {
             return $this->_cols[$key];
+        } elseif (method_exists($this, $attribute)) {
+            return $this->$attribute();
+        } else {
+            throw new Exception("Can't get $key");
         }
-        return $this->canGetAttribute($key);
     }
 
     public function __set($key, $value)
     {
+        $attribute = 'set' . $key;
         if (array_key_exists($key, $this->_cols)) {
             $this->_cols[$key] = $value;
-        } else {
-            $this->canSetAttribute($key, $value);
-        }
-    }
-
-    protected function canGetAttribute($key)
-    {
-        $attribute = 'get' . $key;
-        if (method_exists($this, $attribute)) {
-            return $this->$attribute();
-        }
-        throw new Exception("Can't get $key");
-        
-    }
-
-    protected function canSetAttribute($key, $value)
-    {
-        $attribute = 'set' . $key;
-        if (method_exists($this, $attribute)) {
+        } elseif (method_exists($this, $attribute)) {
             $this->$attribute($value);
         } else {
             throw new Exception("Can't set $key");
         }
-        
     }
 
     public static function find($where=[])
@@ -94,76 +82,24 @@ class BaseModel extends App
             // http://stackoverflow.com/questions/6254093/how-to-parse-camel-case-to-human-readable-string
             return ucwords(preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $attribute));
         }
-        return $attribute . ' field';
+        return $attribute;
     }
 
     public function attributeLabels()
     {
-        return [
-            // example
-            // 'created_at' => 'Created At'
-        ];
+        return [];
     }
 
     public function rules()
     {
-        /**
-        * required - Required field
-        * equals - Field must match another field (email/password confirmation)
-        * different - Field must be different than another field
-        * accepted - Checkbox or Radio must be accepted (yes, on, 1, true)
-        * numeric - Must be numeric
-        * integer - Must be integer number
-        * array - Must be array
-        * length - String must be certain length
-        * lengthBetween - String must be between given lengths
-        * lengthMin - String must be greater than given length
-        * lengthMax - String must be less than given length
-        * min - Minimum
-        * max - Maximum
-        * in - Performs in_array check on given array values
-        * notIn - Negation of in rule (not in array of values)
-        * ip - Valid IP address
-        * email - Valid email address
-        * url - Valid URL
-        * urlActive - Valid URL with active DNS record
-        * alpha - Alphabetic characters only
-        * alphaNum - Alphabetic and numeric characters only
-        * slug - URL slug characters (a-z, 0-9, -, _)
-        * regex - Field matches given regex pattern
-        * date - Field is a valid date
-        * dateFormat - Field is a valid date in the given format
-        * dateBefore - Field is a valid date and is before the given date
-        * dateAfter - Field is a valid date and is after the given date
-        * contains - Field is a string and contains the given string
-        * creditCard - Field is a valid credit card number
-        * instanceOf - Field contains an instance of the given class
-        */ 
-        return [
-            // example
-            // 'required' => ['name', 'email', 'password']
-        ];
+        return [];
     }
 
     public function messages()
     {
-        return [
-            // example
-            // 'required' => '{field} harus diisi gan.'
-        ];
+        return [];
     }
 
-    /**
-    * Load custom rule method(s) and adding to Validator.
-    * example method like:
-    *
-    * public function ruleAlwaysFail() {
-    *     return [
-    *         'message' => 'Everything you do is wrong. You fail.',
-    *         'function' => function($field, $value, [] $params) {return false;},
-    *     ];
-    * }
-    */
     protected function loadAllRuleMethods()
     {
         foreach (get_class_methods($this) as $funcRule) {
@@ -191,16 +127,24 @@ class BaseModel extends App
 
         $validator = new Validator($datas);
         
-        foreach ($this->rules() as $key => $value) {
-            if (array_key_exists($key, $this->messages())) {
-                $validator->rule($key, $value)->message($this->messages()[$key]);
+        foreach ($this->rules() as $value) {
+            if (array_key_exists($value[1], $this->messages())) {
+                if (count($value) == 2) {
+                    $validator->rule($value[1], $value[0])->message($this->messages()[$key]);
+                } else {
+                    $validator->rule($value[1], $value[0], $value[2])->message($this->messages()[$key]);
+                }
                 $labels = [];
                 foreach ($value as $key1) {
                     $labels[$key1] = $this->attributeLabel($key1);
                 }
                 $validator->labels($labels);
             } else {
-                $validator->rule($key, $value);
+                if (count($value) == 2) {
+                    $validator->rule($value[1], $value[0]);
+                } else {
+                    $validator->rule($value[1], $value[0], $value[2]);
+                }
             }
         }
         if ($validator->validate()) {
@@ -242,7 +186,7 @@ class BaseModel extends App
         return true;
     }
 
-    public function save()
+    public function save($validate=true)
     {
         $data = [];
         foreach ($this->_cols as $key => $value) {
@@ -250,7 +194,7 @@ class BaseModel extends App
                 $data[$key] = $value;
             }
         }
-        if ($this->validate() && $this->beforeSave()) {
+        if ((! $validate || $this->validate()) && $this->beforeSave()) {
             $this->afterSave();
             if ($this->isNewRecord()) {
                 return App::db()->insert($this->tableName(), $data);
@@ -267,10 +211,33 @@ class BaseModel extends App
         return $this;
     }
 
+    public function join($join=[])
+    {
+        $this->_join = $join;
+        return $this;
+    }
+
+    public function limit($value='')
+    {
+        $this->_where['LIMIT'] = $value;
+        return $this;
+    }
+
+    public function orderBy($value='')
+    {
+        $this->_where['ORDER'] = $value;
+        return $this;
+    }
+
     public function all()
     {
         $results = [];
-        foreach (App::db()->select($this->tableName(), '*', $this->_where) as $row) {
+        if ($this->_join == null) {
+            $query = App::db()->select($this->tableName(), '*', $this->_where);
+        } else {
+            $query = App::db()->select($this->tableName(), $this->_join, '*', $this->_where);
+        }
+        foreach ($query as $row) {
             foreach (get_class_methods($this) as $func) {
                 if (substr($func, 0, 3) == 'get') {
                     foreach ($this->_cols as $key => $value) {
@@ -348,25 +315,19 @@ class BaseModel extends App
 
     public function errors()
     {
-        return $this->_errors;
+        if ($this->hasErrors()) {
+            return $this->_errors;
+        }
+        return false;
     }
 
-    public function hasOne($class, $datas)
+    public function has($class, $datas)
     {
         $where = [];
         foreach ($datas as $key => $value) {
             $where[$key] = $this->$value;
         }
-        return $class::find()->where($where)->one();
-    }
-
-    public function hasMany($class, $datas)
-    {
-        $where = [];
-        foreach ($datas as $key => $value) {
-            $where[$key] = $this->$value;
-        }
-        return $class::find()->where($where)->all();
+        return $class::find()->where($where);
     }
 
     public function timestampBehaviour()

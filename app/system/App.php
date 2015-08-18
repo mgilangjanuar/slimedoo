@@ -17,8 +17,6 @@ class App
 
     protected static $mail;
 
-    protected static $url = '';
-
     protected static $db = [];
 
     /** 
@@ -27,7 +25,6 @@ class App
     */ 
     public static function init(\Slim\Slim $slim, \ptejada\uFlex\User $user, \PHPMailer $mail)
     {
-        static::$url    = static::config()->dir;
         static::$db     = static::config()->db;
         static::$user   = $user;
         static::$app    = $slim;
@@ -61,10 +58,25 @@ class App
         return (object) $params;
     }
 
+    /**
+    * Setting mail from object \PHPMailer and return that object.
+    * @return \PHPMailer
+    */
     public static function mail()
     {
         require 'app/config/mail.php';
-        
+        static::$mail->isSMTP();
+        static::$mail->Host = $mail['Host'];
+        static::$mail->SMTPAuth = $mail['SMTPAuth'];
+        static::$mail->Username = $mail['Username'];
+        static::$mail->Password = $mail['Password'];
+        static::$mail->SMTPSecure = $mail['SMTPSecure'];
+        static::$mail->Port = $mail['Port'];
+        static::$mail->From = $mail['From'];
+        static::$mail->FromName = $mail['FromName'];
+        static::$mail->isHTML(true);
+        return static::$mail;
+
     }
 
     /** 
@@ -76,6 +88,12 @@ class App
         return new medoo(static::$db);
     }
 
+    /**
+    * Get all roles in config and return array if null arguments, and return id
+    * number of role based arguments.
+    * @param $value=''
+    * @return [] or string
+    */
     public static function role($value='')
     {
         if ($value == null) {
@@ -91,7 +109,7 @@ class App
     */ 
     public static function url($value='')
     {
-        return 'http://' . $_SERVER['HTTP_HOST'] . static::$url . ($value != null ? '/' : '') . $value;
+        return 'http://' . $_SERVER['HTTP_HOST'] . static::config()->dir . ($value != null ? '/' : '') . $value;
     }
 
     /** 

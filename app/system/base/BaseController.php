@@ -4,20 +4,15 @@ use \App;
 
 class BaseController extends App
 {
-    public $layout;
+    public $layout = 'app/views/layouts/main.php';
+
+    public $publicFunction = 'action';
+
+    public $defaultFunction = 'index';
+
+    public $alert;
 
     public $title;
-
-    public $publicFunction;
-
-    public $defaultFunction;
-
-    public function __construct()
-    {
-        $this->layout = 'app/views/layouts/main.php';
-        $this->publicFunction = 'action';
-        $this->defaultFunction = 'index';
-    }
 
     public function rules()
     {
@@ -58,6 +53,7 @@ class BaseController extends App
     {
         $className = str_replace('\\', '/', static::className());
         $className = str_replace('app/controllers/', '', $className);
+        $className = str_replace('Controller', '', $className);
         return $this->dashesFormat($className);
     }
 
@@ -86,7 +82,20 @@ class BaseController extends App
             }
         }
 
-        require $this->layout;
+        $validate = false;
+        if ($roles == null) {
+            $validate = true;
+        } elseif (App::$user->isSigned() && in_array(App::role()[App::$user->GroupID], $roles)) {
+            $validate = true;
+        } elseif (App::$user->isSigned() && in_array('@', $roles)) {
+            $validate = true;
+        }
+
+        if ($validate) {
+            require $this->layout;
+        } else {
+            return $this->forbidden('You don\'t have access to this content');
+        }
     }
 
     public function redirect($url=null)
@@ -101,6 +110,29 @@ class BaseController extends App
         } elseif (is_array($url)) {
             return static::url($this->viewDir() . ($url != null ? '/' : '') . $url[0]);
         }
+    }
+
+    public function alert()
+    {
+        if ($this->alert != null) {
+            foreach ($this->alert as $key => $value) {
+                return \helpers\BaseHtml::alert($key, $value);
+            }
+        }
+    }
+
+    public function forbidden($message)
+    {
+        $type = 'Forbidden (#403)';
+        $__content = 'app/views/site/error.php';
+        require $this->layout;
+    }
+
+    public function notFound($message)
+    {
+        $type = 'Not Found (#404)';
+        $__content = 'app/views/site/error.php';
+        require $this->layout;
     }
 
     /** 
