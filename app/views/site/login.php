@@ -1,6 +1,8 @@
 <?php
-    $this->title = 'Login';
     use \helpers\Form;
+    use \helpers\BaseHtml;
+    $this->title = 'Login';
+    $this->breadcrumb([$this->title]);
 ?>
 
 <div class="main-title">
@@ -11,11 +13,15 @@
     <div class="col-sm-6 col-sm-offset-3">
 
     <?php $form = new Form ?>
-    <?php $form->begin() ?>
-        <?php $form->label('Username or Email')->inputText($model, 'Username') ?>
-        <?php $form->password($model, 'Password') ?>
-        <?php $form->checkBox($model, 'rememberMe') ?>
-        <?php $form->submitButton('Login') ?>
+    <?= $form->begin() ?>
+    <?= $form->label('Username or Email')->inputText($model, 'Username') ?>
+    <?= $form->password($model, 'Password') ?>
+    <?= $form->checkBox($model, 'rememberMe') ?>
+    <p class="text-right">
+        <?= BaseHtml::a('Forgot your password?‎', ['site/reset-password']) ?><br />
+        <?= BaseHtml::a('Have no an account?', ['site/register']) ?>
+    </p>
+    <?= $form->submitButton('Login') ?>
     <?= $form->end() ?>
 
   </div>

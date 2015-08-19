@@ -2,7 +2,6 @@
 namespace app\controllers;
 
 use \App;
-use \app\models\Book;
 use \app\models\User;
 use \ptejada\uFlex\Collection;
 
@@ -82,6 +81,9 @@ class SiteController extends \BaseController
 
     public function actionNewPassword()
     {
+        if (! $this->get('c')) {
+            return $this->forbidden('You don\'t have access to this content');
+        }
         $model = new User;
         $model->scenario('new-password');
         if ($this->post() && $model->validate()) {

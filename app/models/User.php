@@ -52,7 +52,7 @@ class User extends \BaseModel
             'rememberMe' => 'Remember Me',
         ];
     }
-
+    
     public function register($request, $activation=false)
     {
         if ($request != null) {

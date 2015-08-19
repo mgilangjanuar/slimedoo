@@ -1,6 +1,7 @@
 <?php 
     use \helpers\BaseHtml;
     $this->title = 'About';
+    $this->breadcrumb([$this->title]);
 ?>
 
 <div class="main-title">

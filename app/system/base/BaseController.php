@@ -72,7 +72,6 @@ class BaseController extends App
 
     public function render($__content, $data=[])
     {
-        $validate = false;
         $roles = [];
         if (array_key_exists('auth', $this->rules())) {
             foreach ($this->rules()['auth'] as $key => $value) {
@@ -82,6 +81,7 @@ class BaseController extends App
             }
         }
 
+        $validate = false;
         if ($roles == null) {
             $validate = true;
         } elseif (App::$user->isSigned() && in_array(App::role(), $roles)) {
@@ -94,6 +94,7 @@ class BaseController extends App
 
         $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
         extract($data);
+
         if ($validate) {
             require $this->layout;
         } else {
@@ -122,6 +123,20 @@ class BaseController extends App
                 return \helpers\BaseHtml::alert($key, $value);
             }
         }
+    }
+
+    public function breadcrumb($datas=[])
+    {
+        $result = '<ul class="breadcrumb"><li><a href=' . App::url() . '>Home</a></li>';
+        foreach ($datas as $key => $value) {
+            if ($key == null) {
+                $result .= '<li class="active">' . $value . '</li>';
+            } else {
+                $result .= '<li><a href="' . $this->siteUrl($value) . '">' . $key . '</a></li>';
+            }
+        }
+        $result .= '</ul>';
+        echo $result;
     }
 
     public function forbidden($message)

@@ -3,7 +3,7 @@ namespace helpers;
 
 use \App;
 
-class GridView extends BaseHtml
+class Grid extends BaseHtml
 {
     public static function begin($datas)
     {

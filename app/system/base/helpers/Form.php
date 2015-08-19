@@ -17,7 +17,7 @@ class Form extends BaseHtml
         if (! array_key_exists('class', $options)) {
             $options['class'] = 'form-horizontal';
         }
-        $this->result .= '<form' . BaseHtml::buildOptions($options) . '>';
+        $this->result = '<form' . BaseHtml::buildOptions($options) . '>';
         return $this;
     }
 
@@ -44,7 +44,7 @@ class Form extends BaseHtml
 
     public function inputText($model, $field, $options=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
             <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
                     <input type="text" class="form-control" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '/>
@@ -56,7 +56,7 @@ class Form extends BaseHtml
 
     public function password($model, $field, $options=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
             <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
                     <input type="password" class="form-control" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '/>
@@ -68,7 +68,7 @@ class Form extends BaseHtml
 
     public function checkBox($model, $field, $options=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
             <div class="checkbox"><div>
                 <label>
                     <input type="checkbox" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
@@ -81,7 +81,7 @@ class Form extends BaseHtml
 
     public function textArea($model, $field, $options=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
             <label for="textArea" class="control-label">' . $this->getLabel($model, $field) . '</label>
             <div>
                 <textarea class="form-control" name="' . $field . '"' . BaseHtml::buildOptions($options) . '>' . $model->$field . '</textarea>
@@ -93,7 +93,7 @@ class Form extends BaseHtml
 
     public function radioButton($model, $field, $data, $options=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
         <div>';
 
@@ -112,7 +112,7 @@ class Form extends BaseHtml
 
     public function select($model, $field, $data, $options=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
         <div><select class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
@@ -126,7 +126,7 @@ class Form extends BaseHtml
 
     public function selectMultiple($model, $field, $data, $option=[])
     {
-        $this->result .= '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
         <div><select multiple="" class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
@@ -143,7 +143,7 @@ class Form extends BaseHtml
         if (! array_key_exists('class', $options)) {
             $options['class'] = 'btn btn-primary';
         }
-        $this->result .= '<div class="form-group"><button type="submit"' . BaseHtml::buildOptions($options) . '">' . $text . '</button></div>';
+        $this->result = '<div class="form-group"><button type="submit"' . BaseHtml::buildOptions($options) . '">' . $text . '</button></div>';
         return $this;
     }
 
@@ -166,7 +166,12 @@ class Form extends BaseHtml
 
     public function end()
     {
-        return $this->result . '</form>';
+        return '</form>';
+    }
+
+    public function __toString()
+    {
+        return $this->result;
     }
 
 }

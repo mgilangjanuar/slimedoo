@@ -1,6 +1,7 @@
 <?php
-    $this->title = 'New Password';
     use \helpers\Form;
+    $this->title = 'New Password';
+    $this->breadcrumb([$this->title]);
 ?>
 
 <div class="main-title">
@@ -11,10 +12,10 @@
     <div class="col-sm-6 col-sm-offset-3">
 
     <?php $form = new Form ?>
-    <?php $form->begin() ?>
-        <?php $form->password($model, 'Password') ?>
-        <?php $form->password($model, 'Password2') ?>
-        <?php $form->submitButton('Submit') ?>
+    <?= $form->begin() ?>
+    <?= $form->password($model, 'Password') ?>
+    <?= $form->password($model, 'Password2') ?>
+    <?= $form->submitButton('Submit') ?>
     <?= $form->end() ?>
 
   </div>

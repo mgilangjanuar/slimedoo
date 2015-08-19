@@ -1,6 +1,8 @@
 <?php
-    $this->title = 'Register';
     use \helpers\Form;
+    use \helpers\BaseHtml;
+    $this->title = 'Register';
+    $this->breadcrumb([$this->title]);
 ?>
 
 <div class="main-title">
@@ -11,12 +13,15 @@
     <div class="col-sm-6 col-sm-offset-3">
 
     <?php $form = new Form ?>
-    <?php $form->begin() ?>
-        <?php $form->inputText($model, 'Username') ?>
-        <?php $form->inputText($model, 'Email') ?>
-        <?php $form->password($model, 'Password') ?>
-        <?php $form->password($model, 'Password2') ?>
-        <?php $form->submitButton('Register') ?>
+    <?= $form->begin() ?>
+    <?= $form->inputText($model, 'Username') ?>
+    <?= $form->inputText($model, 'Email') ?>
+    <?= $form->password($model, 'Password') ?>
+    <?= $form->password($model, 'Password2') ?>
+    <p class="text-right">
+        <?= BaseHtml::a('Already have an account?', ['site/login']) ?>
+    </p>
+    <?= $form->submitButton('Register') ?>
     <?= $form->end() ?>
 
   </div>

@@ -280,15 +280,12 @@ class BaseModel extends App
     public function one()
     {
         $results = App::db()->get($this->tableName(), '*', $this->_where);
-        foreach (get_class_methods($this) as $func) {
-            if (substr($func, 0, 3) == 'get') {
-                foreach ($this->_cols as $key => $value) {
-                    $this->$key = $results[$key];
-                }
-                $results[lcfirst(substr($func, 3))] = $this->$func();
+        foreach ($results as $key => $value) {
+            if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key)) {
+                $this->$key = $value;
             }
         }
-        return (object) $results;
+        return $this;
     }
 
     public function beforeDelete()
