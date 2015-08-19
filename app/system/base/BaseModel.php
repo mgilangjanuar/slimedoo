@@ -103,6 +103,11 @@ class BaseModel extends App
         return [];
     }
 
+    public function scenario($value)
+    {
+        return null;
+    }
+
     public function messages()
     {
         return [];
@@ -119,34 +124,38 @@ class BaseModel extends App
 
     public function validate()
     {
+        // Registering custom rules.
         $this->loadAllRuleMethods();
 
+        // Collect data for validate.
         if ($this->isNewRecord()) {
             $datas = $this->_cols;
         } else {
             $datas = App::db()->get($this->tableName(), '*', $this->_where);
         }
-
         foreach (get_class_methods($this) as $funcGet) {
             if (substr($funcGet, 0, 3) == 'get') {
                 $datas[lcfirst(substr($funcGet, 3))] = $this->$funcGet();
             }
         }
 
+        // Insert data to Validator.
         $validator = new Validator($datas);
-        
-        foreach ($this->rules() as $value) {
+
+        // Get rules from $this->rules() and $this->scenario
+        $rules = $this->rules();
+        if ($this->scenario != null) {
+            $rules[] = $this->scenario;
+        }
+
+        // Insert rule, and fields (and params) to rule method.
+        foreach ($rules as $value) {
             if (array_key_exists($value[1], $this->messages())) {
                 if (count($value) == 2) {
                     $validator->rule($value[1], $value[0])->message($this->messages()[$key]);
                 } else {
                     $validator->rule($value[1], $value[0], $value[2])->message($this->messages()[$key]);
                 }
-                $labels = [];
-                foreach ($value as $key1) {
-                    $labels[$key1] = $this->attributeLabel($key1);
-                }
-                $validator->labels($labels);
             } else {
                 if (count($value) == 2) {
                     $validator->rule($value[1], $value[0]);
@@ -154,7 +163,16 @@ class BaseModel extends App
                     $validator->rule($value[1], $value[0], $value[2]);
                 }
             }
+
+            // Insert label form all key to validator.
+            $labels = [];
+            foreach (array_keys($datas) as $key) {
+                $labels[$key] = $this->attributeLabel($key);
+            }
+            $validator->labels($labels);
         }
+
+        // Start validate.
         if ($validator->validate()) {
             return true;
         } else {

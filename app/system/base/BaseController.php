@@ -6,6 +6,8 @@ class BaseController extends App
 {
     public $layout = 'app/views/layouts/main.php';
 
+    public $errorLayout = 'app/views/layouts/main.php';
+
     public $publicFunction = 'action';
 
     public $defaultFunction = 'index';
@@ -70,9 +72,7 @@ class BaseController extends App
 
     public function render($__content, $data=[])
     {
-        $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
-        extract($data);
-
+        $validate = false;
         $roles = [];
         if (array_key_exists('auth', $this->rules())) {
             foreach ($this->rules()['auth'] as $key => $value) {
@@ -81,16 +81,18 @@ class BaseController extends App
                 }
             }
         }
-
-        $validate = false;
         if ($roles == null) {
             $validate = true;
         } elseif (App::$user->isSigned() && in_array(App::role()[App::$user->GroupID], $roles)) {
             $validate = true;
         } elseif (App::$user->isSigned() && in_array('@', $roles)) {
             $validate = true;
+        } elseif (!App::$user->isSigned() && in_array('#', $roles)) {
+            $validate = true;
         }
 
+        $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
+        extract($data);
         if ($validate) {
             require $this->layout;
         } else {
@@ -125,14 +127,14 @@ class BaseController extends App
     {
         $type = 'Forbidden (#403)';
         $__content = 'app/views/site/error.php';
-        require $this->layout;
+        require $this->errorLayout;
     }
 
     public function notFound($message)
     {
         $type = 'Not Found (#404)';
         $__content = 'app/views/site/error.php';
-        require $this->layout;
+        require $this->errorLayout;
     }
 
     /** 

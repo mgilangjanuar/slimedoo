@@ -16,7 +16,7 @@
         <?php $form->inputText($model, 'Email') ?>
         <?php $form->password($model, 'Password') ?>
         <?php $form->password($model, 'Password2') ?>
-        <?php $form->submitButton('Submit') ?>
+        <?php $form->submitButton('Register') ?>
     <?= $form->end() ?>
 
   </div>

@@ -22,27 +22,22 @@
 
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="active">
-                    <a href="#">Dashboard</a>
+                <li class="<?= App::activeRoute() == '/' || App::activeRoute() == '/site' || App::activeRoute() == '/site/index' ? 'active' : '' ?>">
+                    <a href="<?= App::url() ?>">Dashboard</a>
                 </li>
-                <li>
-                    <a href="#">Shortcuts</a>
-                </li>
-                <li>
-                    <a href="#">Overview</a>
-                </li>
-                <li>
-                    <a href="#">Events</a>
-                </li>
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Services</a>
+                <li class="<?= App::activeRoute() == '/site/about' ? 'active' : '' ?>">
+                    <a href="<?= App::url('site/about') ?>">About</a>
                 </li>
                 <?php if (App::$user->isSigned()): ?>
                     <li>
                         <a href="<?= App::url('site/logout') ?>">Logout (<?= App::$user->Username ?>)</a>
+                    </li>
+                <?php else: ?>
+                    <li class="<?= App::activeRoute() == '/site/login' ? 'active' : '' ?>">
+                        <a href="<?= App::url('site/login') ?>">Login</a>
+                    </li>
+                    <li class="<?= App::activeRoute() == '/site/register' ? 'active' : '' ?>">
+                        <a href="<?= App::url('site/register') ?>">Register</a>
                     </li>
                 <?php endif ?>
             </ul>

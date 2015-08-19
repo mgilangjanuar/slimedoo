@@ -13,12 +13,12 @@ class User extends \BaseModel
 
     public function fields()
     {
-        return ['Username', 'Password', 'Email', 'Password2', 'Email2'];
+        return ['Username', 'Password', 'Email', 'Password2', 'Email2', 'rememberMe'];
     }
 
     public function rules()
     {
-        $rules = [
+        return [
             [['Email', 'Email2'], 'email'],
             [['RegDate', 'LastLogin', 'GroupID', 'Activated'], 'integer'],
             [['Activated'], 'lengthMax', 1],
@@ -26,8 +26,6 @@ class User extends \BaseModel
             [['Email2'], 'equals', 'Email'],
             [['Password2'], 'equals', 'Password'],
         ];
-        $rules[] = $this->scenario;
-        return $rules;
     }
 
     public function scenario($value)
@@ -51,17 +49,8 @@ class User extends \BaseModel
             'Password2' => 'Password Confirmation',
             'Email' => 'Email',
             'Email2' => 'Email Confirmation',
+            'rememberMe' => 'Remember Me',
         ];
-    }
-
-    public function getPassword2()
-    {
-        return $this->Password;
-    }
-
-    public function setPassword2($pass)
-    {
-        $this->password2 = $pass;
     }
 
     public function register($request, $activation=false)
@@ -97,7 +86,7 @@ class User extends \BaseModel
             if ($user != null) {
                 App::$mail->addAddress($user->Email, $user->Username);
                 App::$mail->Subject = 'Password Recovery';
-                App::$mail->Body    = 'Click this link for change password ' . App::url('site/new-password?c=' . $user->Confirmation);
+                App::$mail->Body    = 'Your confirmation link: ' . App::url('site/new-password?c=' . $user->Confirmation);
                 if (App::$mail->send()) {
                     return true;
                 } else {

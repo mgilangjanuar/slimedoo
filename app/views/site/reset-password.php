@@ -13,7 +13,7 @@
     <?php $form = new Form ?>
     <?php $form->begin() ?>
         <?php $form->inputText($model, 'Email') ?>
-        <?php $form->submitButton('Submit') ?>
+        <?php $form->submitButton('Reset Password') ?>
     <?= $form->end() ?>
 
   </div>

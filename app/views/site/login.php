@@ -14,7 +14,8 @@
     <?php $form->begin() ?>
         <?php $form->label('Username or Email')->inputText($model, 'Username') ?>
         <?php $form->password($model, 'Password') ?>
-        <?php $form->submitButton('Submit') ?>
+        <?php $form->checkBox($model, 'rememberMe') ?>
+        <?php $form->submitButton('Login') ?>
     <?= $form->end() ?>
 
   </div>

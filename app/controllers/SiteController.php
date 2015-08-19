@@ -8,6 +8,16 @@ use \ptejada\uFlex\Collection;
 
 class SiteController extends \BaseController
 {
+    public function rules()
+    {
+        return [
+            'auth' => [
+                '@' => ['logout'],
+                '#' => ['login', 'reset-password', 'register', 'new-password'],
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         return $this->render('index', [
@@ -15,12 +25,17 @@ class SiteController extends \BaseController
         ]);
     }
 
+    public function actionAbout()
+    {
+        return $this->render('about');
+    }
+
     public function actionLogin()
     {
         $model = new User;
         $model->scenario('login');
         if ($this->post() && $model->validate()) {
-            App::$user->login($this->post('Username'), $this->post('Password'), 0);
+            App::$user->login($this->post('Username'), $this->post('Password'), $this->post('rememberMe'));
             if (App::$user->isSigned()) {
                 return $this->redirect(['index']);
             } else {
@@ -54,7 +69,8 @@ class SiteController extends \BaseController
         $model->scenario('reset-password');
         if ($this->post() && $model->validate()) {
             if ($model->resetPassword($this->post())) {
-                return $this->redirect(['new-password']);
+                $model->Email = '';
+                $this->alert = ['success' => 'Check your email in inbox/spam for confirmation link.'];
             } else {
                 $this->alert = ['danger' => App::$user->log->getErrors()[0]];
             }
