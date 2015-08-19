@@ -81,9 +81,10 @@ class BaseController extends App
                 }
             }
         }
+
         if ($roles == null) {
             $validate = true;
-        } elseif (App::$user->isSigned() && in_array(App::role()[App::$user->GroupID], $roles)) {
+        } elseif (App::$user->isSigned() && in_array(App::role(), $roles)) {
             $validate = true;
         } elseif (App::$user->isSigned() && in_array('@', $roles)) {
             $validate = true;

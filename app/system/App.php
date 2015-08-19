@@ -82,17 +82,21 @@ class App
     }
 
     /**
-    * Get all roles in config and return array if null arguments, and return id
-    * number of role based arguments.
-    * @param $value=''
-    * @return [] or string
+    * Get all roles in config and return array role in config file.
+    * @return []
     */
-    public static function role($value='')
+    public static function roles()
     {
-        if ($value == null) {
-            return static::config()->role;
-        }
-        return array_flip(static::config()->role)[$value];
+        return static::config()->role;
+    }
+
+    /**
+    * Get user role with groupID in user and array of role in config file.
+    * @return string
+    */
+    public static function role()
+    {
+        return static::config()->role[static::$user->GroupID - 1];
     }
 
     /** 

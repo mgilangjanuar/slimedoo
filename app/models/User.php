@@ -57,9 +57,9 @@ class User extends \BaseModel
     {
         if ($request != null) {
             if (User::find()->count() == null) {
-                $request['GroupID'] = 0;
-            } else {
                 $request['GroupID'] = 1;
+            } else {
+                $request['GroupID'] = 2;
             }
             $input = new Collection($request);
             $input->filter('Username', 'Email', 'Password', 'GroupID');

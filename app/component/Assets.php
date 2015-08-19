@@ -24,7 +24,7 @@ class Assets
     {
         return [
             'app/site.css',
-            'bootstrap/bootstrap.css',
+            'bootstrap/css/bootstrap.css',
             'fontawesome/css/font-awesome.min.css',
             'simple-sidebar/sidebar.css',
         ];
@@ -34,7 +34,7 @@ class Assets
     {
         return [
             'jquery/jquery.min.js',
-            'bootstrap/bootstrap.min.js',
+            'bootstrap/js/bootstrap.min.js',
             'simple-sidebar/toggle-sidebar.js',
         ];
     }

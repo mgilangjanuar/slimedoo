@@ -8,5 +8,5 @@
 </div>
 
 <p>
-    That is an example page. You can found me in <code><?= __FILE__ ?> </code>
+    This is an example page you can found me in <code><?= __FILE__ ?> </code>
 </p>
