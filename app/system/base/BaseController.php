@@ -78,7 +78,12 @@ class BaseController extends App
 
     protected function callerAction()
     {
-        return lcfirst(substr(debug_backtrace()[2]['function'], strlen($this->publicFunction)));
+        if (strpos(debug_backtrace()[2]['function'], $this->publicFunction)) {
+            return lcfirst(substr(debug_backtrace()[2]['function'], strlen($this->publicFunction)));            
+        } else {
+            return false;
+        }
+
     }
 
     public function render($__content, $data=[])
@@ -111,7 +116,7 @@ class BaseController extends App
         ob_end_clean();
 
         if ($validate) {
-            include $this->layout;
+            require $this->layout;
         } else {
             return $this->forbidden('You don\'t have access to this content');
         }
