@@ -1,4 +1,22 @@
 {
+    "name": "mgilangjanuar/SliMedoo-Framework-v2",
+    "type": "framework",
+    "description": "PHP framework made with Slim and Medoo as main component.",
+    "keywords": [
+        "PHP",
+        "framework",
+        "slim",
+        "medoo"
+    ],
+    "homepage": "https://github.com/mgilangjanuar/SliMedoo-Framework-v2",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Muhammad Gilang Januar",
+            "email": "mgilangjanuar@gmail.com",
+            "homepage": "http://semardev.com"
+        }
+    ],
     "require": {
         "slim/slim": "^2.6",
         "catfan/medoo": "^0.9.8",

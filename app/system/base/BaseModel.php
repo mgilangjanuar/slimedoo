@@ -344,13 +344,22 @@ class BaseModel extends App
         return false;
     }
 
-    public function has($class, $datas)
+    public function hasMany($class, $datas)
     {
         $where = [];
         foreach ($datas as $key => $value) {
             $where[$key] = $this->$value;
         }
         return $class::find()->where($where);
+    }
+
+    public function hasOne($class, $datas)
+    {
+        $where = [];
+        foreach ($datas as $key => $value) {
+            $where[$key] = $this->$value;
+        }
+        return $class::find()->where($where)->one();
     }
 
     public function timestampBehaviour()
