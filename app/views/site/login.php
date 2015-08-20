@@ -2,7 +2,7 @@
     use \helpers\Form;
     use \helpers\BaseHtml;
     $this->title = 'Login';
-    $this->breadcrumb([$this->title]);
+    $this->breadcrumb = [$this->title];
 ?>
 
 <div class="main-title">

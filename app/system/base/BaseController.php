@@ -1,6 +1,7 @@
 <?php
 
 use \App;
+use \Assets;
 
 class BaseController extends App
 {
@@ -12,9 +13,19 @@ class BaseController extends App
 
     public $defaultFunction = 'index';
 
+    public $css = [];
+
+    public $cssFile = [];
+
+    public $js = [];
+
+    public $jsFile = [];
+
     public $alert;
 
     public $title;
+
+    public $breadcrumb;
 
     public function rules()
     {
@@ -95,6 +106,10 @@ class BaseController extends App
         $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
         extract($data);
 
+        ob_start();
+        require $__content;
+        ob_end_clean();
+
         if ($validate) {
             require $this->layout;
         } else {
@@ -125,18 +140,20 @@ class BaseController extends App
         }
     }
 
-    public function breadcrumb($datas=[])
+    public function breadcrumb()
     {
-        $result = '<ul class="breadcrumb"><li><a href=' . App::url() . '>Home</a></li>';
-        foreach ($datas as $key => $value) {
-            if ($key == null) {
-                $result .= '<li class="active">' . $value . '</li>';
-            } else {
-                $result .= '<li><a href="' . $this->siteUrl($value) . '">' . $key . '</a></li>';
+        if ($this->breadcrumb != null) {
+            $result = '<ul class="breadcrumb"><li><a href=' . App::url() . '>Home</a></li>';
+            foreach ($this->breadcrumb as $key => $value) {
+                if ($key == null) {
+                    $result .= '<li class="active">' . $value . '</li>';
+                } else {
+                    $result .= '<li><a href="' . $this->siteUrl($value) . '">' . $key . '</a></li>';
+                }
             }
+            $result .= '</ul>';
+            return $result;
         }
-        $result .= '</ul>';
-        echo $result;
     }
 
     public function forbidden($message)
@@ -152,5 +169,63 @@ class BaseController extends App
         $__content = 'app/views/site/error.php';
         require $this->errorLayout;
     }
-    
+
+    public function style()
+    {
+        foreach (Assets::css() as $css) {
+            echo Assets::cssLoad($css);
+        }
+        foreach ($this->cssFile as $file) {
+            echo Assets::cssLoad($file);
+        }
+        foreach ($this->css as $style) {
+            echo "<style>";
+            echo $style;
+            echo "</style>";
+        }
+    }
+
+    public function script()
+    {
+        foreach (Assets::js() as $js) {
+            echo Assets::jsLoad($js);
+        }
+        foreach ($this->jsFile as $file) {
+            echo Assets::jsLoad($file);
+        }
+        foreach ($this->js as $script) {
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
+    }
+
+    public function registerCss($css)
+    {
+        if (! in_array($css, $this->css)) {
+            $this->css[] = $css;
+        }
+    }
+
+    public function registerCssFile($css)
+    {
+        if (! in_array($css, $this->cssFile)) {
+            $this->cssFile[] = $css;
+        }
+    }
+
+    public function registerJs($js)
+    {
+        if (! in_array($js, $this->js)) {
+            $this->js[] = $js;
+        }
+    }
+
+    public function registerJsFile($js)
+    {
+        if (! in_array($js, $this->jsFile)) {
+            $this->jsFile[] = $js;
+        }
+    }
+
 }

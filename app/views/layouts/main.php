@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+    <title><?= $this->title ?> :: <?= App::config()->name ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <?= \Assets::load('css') ?>
+    <?php $this->style() ?>
 
 </head>
 <body>
@@ -47,9 +48,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 main-content">
+                        <?= $this->breadcrumb() ?>
                         <?= $this->alert() ?>
                         <?php require $__content; ?>
-                        <title><?= $this->title ?> :: <?= App::config()->name ?></title>
                     </div>
                 </div>
             </div>
@@ -62,7 +63,7 @@
 
     </div>
 
-    <?= \Assets::load('js') ?>
+    <?php $this->script() ?>
 
 </body>
 </html>

@@ -2,7 +2,6 @@
 
 use \helpers\BaseHtml;
 $this->title = App::config()->name;
-
 ?>
 
 <div class="main-title">

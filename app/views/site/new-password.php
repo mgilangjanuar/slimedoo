@@ -1,7 +1,7 @@
 <?php
     use \helpers\Form;
     $this->title = 'New Password';
-    $this->breadcrumb([$this->title]);
+    $this->breadcrumb = [$this->title];
 ?>
 
 <div class="main-title">

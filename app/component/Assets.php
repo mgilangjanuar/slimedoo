@@ -2,25 +2,12 @@
 
 class Assets
 {
-    public static function load($func)
-    {
-        if (method_exists(get_called_class(), $func)) {
-            foreach (static::$func() as $file) {
-                $load = $func . 'Load';
-                echo static::$load($file);
-            }
-        } else {
-            throw new Exception('Error load ' . $func . '. Go to app/component/Assets.php for resolve this.');
-            
-        }
-    }
-
-    protected static function dir()
+    public static function dir()
     {
         return \App::url('web/assets/');
     }
 
-    protected static function css()
+    public static function css()
     {
         return [
             'app/site.css',
@@ -30,7 +17,7 @@ class Assets
         ];
     }
 
-    protected static function js()
+    public static function js()
     {
         return [
             'jquery/jquery.min.js',
@@ -39,12 +26,12 @@ class Assets
         ];
     }
 
-    protected static function cssLoad($location)
+    public static function cssLoad($location)
     {
         return '<link rel="stylesheet" href="' . static::dir() . $location . '">';
     }
 
-    protected static function jsLoad($location)
+    public static function jsLoad($location)
     {
         return '<script src="' . static::dir() . $location . '"></script>';
     }

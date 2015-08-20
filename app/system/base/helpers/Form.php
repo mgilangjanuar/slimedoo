@@ -28,13 +28,6 @@ class Form extends BaseHtml
         }
     }
 
-    public function hasError($model, $field)
-    {
-        if ($model->hasErrors() && array_key_exists($field, $model->errors())) {
-            return ' has-error';
-        }
-    }
-
     public function help($value='')
     {
         if ($value != null) {
@@ -44,7 +37,7 @@ class Form extends BaseHtml
 
     public function inputText($model, $field, $options=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
             <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
                     <input type="text" class="form-control" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '/>
@@ -56,7 +49,7 @@ class Form extends BaseHtml
 
     public function password($model, $field, $options=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
             <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
                     <input type="password" class="form-control" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '/>
@@ -68,7 +61,7 @@ class Form extends BaseHtml
 
     public function checkBox($model, $field, $options=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
             <div class="checkbox"><div>
                 <label>
                     <input type="checkbox" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
@@ -81,7 +74,7 @@ class Form extends BaseHtml
 
     public function textArea($model, $field, $options=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
             <label for="textArea" class="control-label">' . $this->getLabel($model, $field) . '</label>
             <div>
                 <textarea class="form-control" name="' . $field . '"' . BaseHtml::buildOptions($options) . '>' . $model->$field . '</textarea>
@@ -93,7 +86,7 @@ class Form extends BaseHtml
 
     public function radioButton($model, $field, $data, $options=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
         <div>';
 
@@ -112,7 +105,7 @@ class Form extends BaseHtml
 
     public function select($model, $field, $data, $options=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
         <div><select class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
@@ -126,7 +119,7 @@ class Form extends BaseHtml
 
     public function selectMultiple($model, $field, $data, $option=[])
     {
-        $this->result = '<div class="form-group' . $this->hasError($model, $field) . '">
+        $this->result = '<div class="form-group">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
         <div><select multiple="" class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
