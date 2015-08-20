@@ -111,10 +111,16 @@ class BaseController extends App
         ob_end_clean();
 
         if ($validate) {
-            require $this->layout;
+            include $this->layout;
         } else {
             return $this->forbidden('You don\'t have access to this content');
         }
+    }
+
+    public function renderExtend($__content, $data=[])
+    {
+        extract($data);
+        require 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
     }
 
     public function redirect($url=null)
@@ -140,10 +146,10 @@ class BaseController extends App
         }
     }
 
-    public function breadcrumb()
+    public function breadcrumb($urlBase='')
     {
         if ($this->breadcrumb != null) {
-            $result = '<ul class="breadcrumb"><li><a href=' . App::url() . '>Home</a></li>';
+            $result = '<ul class="breadcrumb"><li><a href=' . App::url($urlBase) . '>Home</a></li>';
             foreach ($this->breadcrumb as $key => $value) {
                 if ($key == null) {
                     $result .= '<li class="active">' . $value . '</li>';

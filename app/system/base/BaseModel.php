@@ -199,7 +199,7 @@ class BaseModel extends App
                 }
             }
         }
-
+        return true;
     }
 
     public function beforeSave()
@@ -223,10 +223,11 @@ class BaseModel extends App
         if ((! $validate || $this->validate()) && $this->beforeSave()) {
             $this->afterSave();
             if ($this->isNewRecord()) {
-                return App::db()->insert($this->tableName(), $data);
+                $id = App::db()->insert($this->tableName(), $data);
             } else {
-                return App::db()->update($this->tableName(), $data, $this->_where);
+                $id = App::db()->update($this->tableName(), $data, $this->_where);
             }
+            return $this->where([$this->fields()[0] => $id])->one();
         }
         return false;
     }
@@ -280,9 +281,11 @@ class BaseModel extends App
     public function one()
     {
         $results = App::db()->get($this->tableName(), '*', $this->_where);
-        foreach ($results as $key => $value) {
-            if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key)) {
-                $this->$key = $value;
+        if ($results != null) {
+            foreach ($results as $key => $value) {
+                if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key)) {
+                    $this->$key = $value;
+                }
             }
         }
         return $this;

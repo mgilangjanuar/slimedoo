@@ -3,7 +3,6 @@ namespace app\controllers;
 
 use \App;
 use \app\models\User;
-use \ptejada\uFlex\Collection;
 
 class SiteController extends \BaseController
 {
@@ -28,6 +27,13 @@ class SiteController extends \BaseController
     {   
         return $this->render('about');
     }
+
+
+    /**
+    *
+    * Please careful if you want to delete or modify methods below.
+    *
+    */
 
     public function actionLogin()
     {

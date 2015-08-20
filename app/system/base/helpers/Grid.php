@@ -65,6 +65,6 @@ class Grid extends BaseHtml
         return
             '<a href="'. App::url($url . 'view/' . $model->$param) . '"><i class="glyphicon glyphicon-eye-open"></i></a> 
             <a href="'. App::url($url . 'update/' . $model->$param) . '"><i class="glyphicon glyphicon-pencil"></i></a> 
-            <a href="'. App::url($url . 'delete/' . $model->$param) . '"><i class="glyphicon glyphicon-trash"></i></a>';
+            <a onclick="if (confirm(\'Are you sure want to delete this item?\') == false) return false" href="'. App::url($url . 'delete/' . $model->$param) . '"><i class="glyphicon glyphicon-trash"></i></a>';
     }
 }

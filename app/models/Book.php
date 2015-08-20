@@ -8,6 +8,7 @@ class Book extends \BaseModel
         return 'book';
     }
 
+    // In zero-th index must be set to primary key column name in table.
     public function fields()
     {
         return ['id', 'title', 'writer'];
@@ -53,7 +54,7 @@ class Book extends \BaseModel
         ];
     }
 
-    // add custom message
+    // add custom error message in rules
     public function messages()
     {
         return [
@@ -65,13 +66,16 @@ class Book extends \BaseModel
     public function attributeLabels()
     {
         return [
-            // example
-            // 'created_at' => 'Created At'
+            'id' => 'ID',
+            'title' => 'Title',
+            'writer' => 'Writer',
         ];
     }
 
     /**
-    * Load custom rule method(s) and adding to Validator.
+    * Load custom rule method(s) and adding to Validator. And
+    * set to rules() like: [['title'], 'alwaysFail']
+    *
     * example method like:
     *
     * public function ruleAlwaysFail() {
