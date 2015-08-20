@@ -152,24 +152,5 @@ class BaseController extends App
         $__content = 'app/views/site/error.php';
         require $this->errorLayout;
     }
-
-    /** 
-    * Request get Http method.
-    * @param string $value
-    * @return [] or string
-    */ 
-    public function get($value='')
-    {
-        return static::$app->request->get($value);
-    }
-
-    /** 
-    * Request post Http method.
-    * @param string $value
-    * @return [] or string
-    */ 
-    public function post($value='')
-    {
-        return static::$app->request->post($value);
-    }
+    
 }

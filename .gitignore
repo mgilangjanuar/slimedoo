@@ -1,3 +1,4 @@
+.DS_Store
 /vendor
 /app/config/config.php
 /app/config/mail.php

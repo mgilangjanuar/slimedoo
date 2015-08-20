@@ -25,7 +25,7 @@ class SiteController extends \BaseController
     }
 
     public function actionAbout()
-    {
+    {   
         return $this->render('about');
     }
 
@@ -33,8 +33,8 @@ class SiteController extends \BaseController
     {
         $model = new User;
         $model->scenario('login');
-        if ($this->post() && $model->validate()) {
-            App::$user->login($this->post('Username'), $this->post('Password'), $this->post('rememberMe'));
+        if (App::$app->request->post() && $model->validate()) {
+            App::$user->login(App::$app->request->post('Username'), App::$app->request->post('Password'), App::$app->request->post('rememberMe'));
             if (App::$user->isSigned()) {
                 return $this->redirect(['index']);
             } else {
@@ -50,8 +50,8 @@ class SiteController extends \BaseController
     {
         $model = new User;
         $model->scenario('register');
-        if ($this->post() && $model->validate()) {
-            if ($model->register($this->post())) {
+        if (App::$app->request->post() && $model->validate()) {
+            if ($model->register(App::$app->request->post())) {
                 return $this->redirect(['login']);
             } else {
                 $this->alert = ['danger' => App::$user->log->getErrors()[0]];
@@ -66,8 +66,8 @@ class SiteController extends \BaseController
     {
         $model = new User;
         $model->scenario('reset-password');
-        if ($this->post() && $model->validate()) {
-            if ($model->resetPassword($this->post())) {
+        if (App::$app->request->post() && $model->validate()) {
+            if ($model->resetPassword(App::$app->request->post())) {
                 $model->Email = '';
                 $this->alert = ['success' => 'Check your email in inbox/spam for confirmation link.'];
             } else {
@@ -81,13 +81,13 @@ class SiteController extends \BaseController
 
     public function actionNewPassword()
     {
-        if (! $this->get('c')) {
+        if (! App::$app->request->get('c')) {
             return $this->forbidden('You don\'t have access to this content');
         }
         $model = new User;
         $model->scenario('new-password');
-        if ($this->post() && $model->validate()) {
-            if ($model->newPassword($this->post(), $this->get('c'))) {
+        if (App::$app->request->post() && $model->validate()) {
+            if ($model->newPassword(App::$app->request->post(), App::$app->request->get('c'))) {
                 if (App::$user->isSigned()) {
                     App::$user->logout();
                 }
