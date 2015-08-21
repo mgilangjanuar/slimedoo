@@ -79,7 +79,7 @@ class BaseController extends App
     protected function callerAction()
     {
         if (strpos(debug_backtrace()[2]['function'], $this->publicFunction) === 0) {
-            
+            return lcfirst(substr(debug_backtrace()[2]['function'], strlen($this->publicFunction)));
         } else {
             return false;
         }
