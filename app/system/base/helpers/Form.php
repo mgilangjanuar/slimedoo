@@ -40,7 +40,7 @@ class Form extends BaseHtml
         $this->result = '<div class="form-group">
             <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
-                    <input type="text" class="form-control" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '/>
+                    <input type="text" class="form-control" value="' . $model->$field . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
                     ' . $this->error($model, $field) . '
                 </div>
             </div>';
@@ -52,7 +52,7 @@ class Form extends BaseHtml
         $this->result = '<div class="form-group">
             <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
-                    <input type="password" class="form-control" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '/>
+                    <input type="password" class="form-control" value="' . $model->$field . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
                     ' . $this->error($model, $field) . '
                 </div>
             </div>';
@@ -64,8 +64,8 @@ class Form extends BaseHtml
         $this->result = '<div class="form-group">
             <div class="checkbox"><div>
                 <label>
-                    <input type="hidden" name="' . $field .'" value="0">
-                    <input value="1" type="checkbox"'. ($model->$field == null || $model->$field == 0 ? '' : ' checked ') . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
+                    <input type="hidden" name="' . $model->tableName() . '[' . $field .']" value="0">
+                    <input value="1" type="checkbox"'. ($model->$field == null || $model->$field == 0 ? '' : ' checked ') . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
                     ' . $this->error($model, $field) . '
                 </label>
             </div></div>
@@ -78,7 +78,7 @@ class Form extends BaseHtml
         $this->result = '<div class="form-group">
             <label for="textArea" class="control-label">' . $this->getLabel($model, $field) . '</label>
             <div>
-                <textarea class="form-control" name="' . $field . '"' . BaseHtml::buildOptions($options) . '>' . $model->$field . '</textarea>
+                <textarea class="form-control" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '>' . $model->$field . '</textarea>
                 ' . $this->error($model, $field) . '
             </div>
         </div>';
@@ -94,7 +94,7 @@ class Form extends BaseHtml
         foreach ($data as $key => $value) {
             $this->result .= '<div class="radio"' . BaseHtml::buildOptions($options) . '>
                 <label>
-                    <input type="radio" name="' . $field . '" value="' . $key . '" checked="">
+                    <input type="radio" name="' . $model->tableName() . '[' . $field . ']" value="' . $key . '" checked="">
                     ' . $value . '
                 </label>
             </div>';
@@ -108,7 +108,7 @@ class Form extends BaseHtml
     {
         $this->result = '<div class="form-group">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
-        <div><select class="form-control"' . BaseHtml::buildOptions($options) . '>';
+        <div><select name="' . $model->tableName() . '[' . $field .']" class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
         foreach ($data as $key => $value) {
             $this->result .= '<option value="' . $key . '"' . ($model->$field == $key ? ' selected ' : '') . '>' . $value . '</option>';
@@ -122,7 +122,7 @@ class Form extends BaseHtml
     {
         $this->result = '<div class="form-group">
         <label class="control-label">' . $this->getLabel($model, $field) . '</label>
-        <div><select multiple="" class="form-control"' . BaseHtml::buildOptions($options) . '>';
+        <div><select name="' . $model->tableName() . '[' . $field .']" multiple="" class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
         foreach ($data as $key => $value) {
             $this->result .= '<option value="' . $key . '">' . $value . '</option>';

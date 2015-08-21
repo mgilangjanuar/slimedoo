@@ -20,12 +20,12 @@ class BaseModel extends App
         if ($this->tableName() != null && $this->fields() != null) {
             $this->_cols = array_flip($this->fields());
             foreach ($this->_cols as $key => $value) {
-                $this->_cols[$key] = isset($_POST[$key]) ? $_POST[$key] : null;
+                $this->_cols[$key] = isset($_POST[$this->tableName()][$key]) ? $_POST[$this->tableName()][$key] : null;
             }
             foreach (get_class_methods($this) as $func) {
                 if (substr($func, 0, 3) == 'set') {
                     $attribute = lcfirst(substr($func, 3));
-                    $this->$attribute = isset($_POST[$attribute]) ? $_POST[$attribute] : null;
+                    $this->$attribute = isset($_POST[$this->tableName()][$attribute]) ? $_POST[$this->tableName()][$attribute] : null;
                 }
             }
         }
@@ -187,15 +187,15 @@ class BaseModel extends App
             return false;
         }
         foreach ($this->_cols as $key => $value) {
-            if (array_key_exists($key, $request)) {
-                $this->$key = $request[$key];
+            if (array_key_exists($key, $request[$this->tableName()])) {
+                $this->$key = $request[$this->tableName()][$key];
             }
         }
         foreach (get_class_methods($this) as $func) {
             if (substr($func, 0, 3) == 'set') {
                 $attribute = lcfirst(substr($func, 3));
-                if (array_key_exists($attribute, $request)) {
-                    $this->$attribute = $request[$attribute];
+                if (array_key_exists($attribute, $request[$this->tableName()])) {
+                    $this->$attribute = $request[$this->tableName()][$attribute];
                 }
             }
         }

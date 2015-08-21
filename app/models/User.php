@@ -85,15 +85,28 @@ class User extends \BaseModel
         return $results;
     }
 
+    public function login($request)
+    {
+        if ($request != null) {
+            $input = new Collection($request[$this->tableName()]);
+            App::$user->login($input->Username, $input->Password, $input->rememberMe);
+            if (App::$user->isSigned()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     public function register($request, $activation=false)
     {
         if ($request != null) {
             if (User::find()->count() == null) {
-                $request['GroupID'] = 1;
+                $request[$this->tableName()]['GroupID'] = 1;
             } else {
-                $request['GroupID'] = 2;
+                $request[$this->tableName()]['GroupID'] = 2;
             }
-            $input = new Collection($request);
+            $input = new Collection($request[$this->tableName()]);
             $input->filter('Username', 'Email', 'Password', 'GroupID');
             return App::$user->register($input, $activation);
         }
@@ -103,7 +116,7 @@ class User extends \BaseModel
     public function activate($request)
     {
         if ($request != null) {
-            $input = new Collection($request);
+            $input = new Collection($request[$this->tableName()]);
             $hash = $input->c;
             return App::$user->activate($hash);
         }
@@ -113,7 +126,7 @@ class User extends \BaseModel
     public function resetPassword($request)
     {
         if ($request != null) {
-            $input = new Collection($request);
+            $input = new Collection($request[$this->tableName()]);
             $user = App::$user->resetPassword($input->Email);
             if ($user != null) {
                 App::$mail->addAddress($user->Email, $user->Username);
@@ -134,7 +147,7 @@ class User extends \BaseModel
     public function newPassword($request, $hash='')
     {
         if ($request != null) {
-            $input = new Collection($request);
+            $input = new Collection($request[$this->tableName()]);
             if (!App::$user->isSigned() and $hash) {
                 App::$user->newPassword($hash, [
                     'Password'  => $input->Password,
