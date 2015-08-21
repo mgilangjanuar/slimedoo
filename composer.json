@@ -1,15 +1,17 @@
 {
-    "name": "mgilangjanuar/slimedoo-framework-v2",
-    "type": "framework",
+    "name": "mgilangjanuar/slimedoo",
+    "type": "project",
     "description": "PHP framework made with Slim and Medoo as main component.",
     "keywords": [
         "PHP",
         "framework",
         "slim",
-        "medoo"
+        "medoo",
+        "template"
     ],
-    "homepage": "https://github.com/mgilangjanuar/slimedoo-framework-v2",
+    "homepage": "https://github.com/mgilangjanuar/slimedoo",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Muhammad Gilang Januar",
