@@ -13,7 +13,7 @@
 
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
-        <?= $this->renderExtend('_form', [
+        <?= $this->render('_form', [
             'model' => $model
         ]) ?>
     </div>

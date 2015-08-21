@@ -78,8 +78,8 @@ class BaseController extends App
 
     protected function callerAction()
     {
-        if (strpos(debug_backtrace()[2]['function'], $this->publicFunction)) {
-            return lcfirst(substr(debug_backtrace()[2]['function'], strlen($this->publicFunction)));            
+        if (strpos(debug_backtrace()[2]['function'], $this->publicFunction) === 0) {
+            
         } else {
             return false;
         }
@@ -88,44 +88,43 @@ class BaseController extends App
 
     public function render($__content, $data=[])
     {
-        $roles = [];
-        if (array_key_exists('auth', $this->rules())) {
-            foreach ($this->rules()['auth'] as $key => $value) {
-                if (in_array($this->callerAction(), $value)) {
-                    $roles[] = $key;
+        if ($this->callerAction() === false) {
+            extract($data);
+            require 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
+        } else {
+            $roles = [];
+            if (array_key_exists('auth', $this->rules())) {
+                foreach ($this->rules()['auth'] as $key => $value) {
+                    if (in_array($this->callerAction(), $value)) {
+                        $roles[] = $key;
+                    }
                 }
             }
+
+            $validate = false;
+            if ($roles == null) {
+                $validate = true;
+            } elseif (App::$user->isSigned() && in_array(App::role(), $roles)) {
+                $validate = true;
+            } elseif (App::$user->isSigned() && in_array('@', $roles)) {
+                $validate = true;
+            } elseif (!App::$user->isSigned() && in_array('#', $roles)) {
+                $validate = true;
+            }
+
+            $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
+            extract($data);
+
+            ob_start();
+            require $__content;
+            ob_end_clean();
+
+            if ($validate) {
+                require $this->layout;
+            } else {
+                return $this->forbidden('You don\'t have access to this content');
+            }
         }
-
-        $validate = false;
-        if ($roles == null) {
-            $validate = true;
-        } elseif (App::$user->isSigned() && in_array(App::role(), $roles)) {
-            $validate = true;
-        } elseif (App::$user->isSigned() && in_array('@', $roles)) {
-            $validate = true;
-        } elseif (!App::$user->isSigned() && in_array('#', $roles)) {
-            $validate = true;
-        }
-
-        $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
-        extract($data);
-
-        ob_start();
-        require $__content;
-        ob_end_clean();
-
-        if ($validate) {
-            require $this->layout;
-        } else {
-            return $this->forbidden('You don\'t have access to this content');
-        }
-    }
-
-    public function renderExtend($__content, $data=[])
-    {
-        extract($data);
-        require 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
     }
 
     public function redirect($url=null)

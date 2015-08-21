@@ -64,7 +64,8 @@ class Form extends BaseHtml
         $this->result = '<div class="form-group">
             <div class="checkbox"><div>
                 <label>
-                    <input type="checkbox" value="' . $model->$field . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
+                    <input type="hidden" name="' . $field .'" value="0">
+                    <input value="1" type="checkbox"'. ($model->$field == null || $model->$field == 0 ? '' : ' checked ') . '" name="' . $field . '"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
                     ' . $this->error($model, $field) . '
                 </label>
             </div></div>
@@ -110,7 +111,7 @@ class Form extends BaseHtml
         <div><select class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
         foreach ($data as $key => $value) {
-            $this->result .= '<option value="' . $key . '">' . $value . '</option>';
+            $this->result .= '<option value="' . $key . '"' . ($model->$field == $key ? ' selected ' : '') . '>' . $value . '</option>';
         }
 
         $this->result .= '</select>' . $this->error($model, $field) . '</div></div>';

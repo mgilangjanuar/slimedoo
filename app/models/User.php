@@ -13,7 +13,7 @@ class User extends \BaseModel
 
     public function fields()
     {
-        return ['Username', 'Password', 'Email', 'Password2', 'Email2', 'rememberMe'];
+        return ['ID', 'Username', 'Password', 'Email', 'Activated', 'Confirmation', 'RegDate', 'LastLogin', 'GroupID', 'Password2', 'Email2', 'rememberMe'];
     }
 
     public function rules()
@@ -50,9 +50,41 @@ class User extends \BaseModel
             'Email' => 'Email',
             'Email2' => 'Email Confirmation',
             'rememberMe' => 'Remember Me',
+            'regDatePretty' => 'Registration',
+            'lastLoginPretty' => 'Last Login',
+            'isActivated' => 'Is Activated',
         ];
     }
-    
+
+    public function getRegDatePretty()
+    {
+        return date('d M Y H:i', $this->RegDate);
+    }
+
+    public function getLastLoginPretty()
+    {
+        return date('d M Y H:i', $this->LastLogin);
+    }
+
+    public function getIsActivated()
+    {
+        if ($this->Activated == 0) {
+            return 'Disable';
+        } else {
+            return 'Active';
+        }
+    }
+
+    public function getDataRoles()
+    {
+        $results = [];
+        $roles = App::roles();
+        foreach ($roles as $key => $value) {
+            $results[$key + 1] = $value;
+        }
+        return $results;
+    }
+
     public function register($request, $activation=false)
     {
         if ($request != null) {

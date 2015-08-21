@@ -26,8 +26,11 @@
                 <li class="<?= App::activeRoute() == '/admin/book/index' ? 'active' : '' ?>">
                     <a href="<?= App::url('admin/book/index') ?>">Book List</a>
                 </li>
-                <li class="<?= App::activeRoute() == '/admin/book/create' ? 'active' : '' ?>">
-                    <a href="<?= App::url('admin/book/create') ?>">Create Book</a>
+                <li class="<?= App::activeRoute() == '/admin/profile/index' ? 'active' : '' ?>">
+                    <a href="<?= App::url('admin/profile/index') ?>">Profile</a>
+                </li>
+                <li class="<?= App::activeRoute() == '/admin/user/index' ? 'active' : '' ?>">
+                    <a href="<?= App::url('admin/user/index') ?>">Users</a>
                 </li>
                 <li>
                     <a href="<?= App::url('site/logout') ?>">Logout (<?= App::$user->Username ?>)</a>

@@ -6,4 +6,4 @@
 <?= $form->begin() ?>
 <?= $form->inputText($model, 'title') ?>
 <?= $form->inputText($model, 'writer') ?>
-<?= $form->submitButton('Create') ?>
+<?= $form->submitButton($model->isNewRecord() ? 'Create' : 'Update') ?>

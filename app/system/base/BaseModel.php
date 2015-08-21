@@ -265,14 +265,18 @@ class BaseModel extends App
             $query = App::db()->select($this->tableName(), $this->_join, '*', $this->_where);
         }
         foreach ($query as $row) {
+            foreach ($row as $key => $value) {
+                if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key)) {
+                    $this->$key = $value;
+                }
+            }
+
             foreach (get_class_methods($this) as $func) {
                 if (substr($func, 0, 3) == 'get') {
-                    foreach ($this->_cols as $key => $value) {
-                        $this->$key = $row[$key];
-                    }
                     $row[lcfirst(substr($func, 3))] = $this->$func();
                 }
             }
+
             $results[] = (object) $row;
         }
         return $results;
