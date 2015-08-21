@@ -1,4 +1,5 @@
 # SliMedoo Framework v2
+[![Latest Stable Version](https://poser.pugx.org/mgilangjanuar/slimedoo/v/stable)](https://packagist.org/packages/mgilangjanuar/slimedoo) [![Total Downloads](https://poser.pugx.org/mgilangjanuar/slimedoo/downloads)](https://packagist.org/packages/mgilangjanuar/slimedoo) [![Latest Unstable Version](https://poser.pugx.org/mgilangjanuar/slimedoo/v/unstable)](https://packagist.org/packages/mgilangjanuar/slimedoo) [![License](https://poser.pugx.org/mgilangjanuar/slimedoo/license)](https://packagist.org/packages/mgilangjanuar/slimedoo)
 
 SliMedoo adalah PHP framework yang merupakan hasil pengembangan dari [Slim] dan [Medoo] sebagai komponen utamanya. Slim digunakan untuk routing dan Medoo untuk melakukan koneksi dan komunikasi dengan database. Komponen lainnya yaitu [Valitron], [uFlex], dan [PHPMailer]. SliMedoo Framework v2 terispirasi dari [yii2] yang elegan dan powerful. Beberapa syntax yang ada di yii2 terdapat juga di sini.
 
@@ -8,13 +9,19 @@ PHP >= 5.3
 ### Usage
 Install via composer, ketik ini di console
 ```
-composer create-project mgilangjanuar/slimedoo:"dev-master"
+composer create-project mgilangjanuar/slimedoo:"2.0.0"
 ```
 
-Jika belum install composer, ketk ini di console
+Jika belum install composer, ketik ini di console
 ```
 curl -sS https://getcomposer.org/installer | php
 ```
+
+Setelah itu pindahkan isi folder environments/app/* ke app/ dan lakukan beberapa konfigurasi file berikut:
+
+* config.php (sesuaikan dengan konfigurasi database Anda dll).
+* mail.php (optional, pada base app konfigurasi ini hanya digunakan untuk implementasi forgot password).
+* params.php (optional, bila menggunakan plugin lain yang perlu menginitialisasi value tertentu, akses dengan cara \App::params()).
 
 ### Folder Structure
 ```
@@ -35,6 +42,9 @@ web
 
 ### Tutorial
 Coming soon
+
+### License
+MIT
 
 [Slim]:http://slimframework.com/
 [Medoo]:http://medoo.in/
