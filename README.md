@@ -5,6 +5,17 @@ SliMedoo adalah PHP framework yang merupakan hasil pengembangan dari [Slim] dan 
 ### Requirements
 PHP >= 5.3
 
+### Usage
+Install via composer, ketik ini di console
+```
+composer create-project mgilangjanuar/slimedoo:"dev-master"
+```
+
+Jika belum install composer, ketk ini di console
+```
+curl -sS https://getcomposer.org/installer | php
+```
+
 ### Folder Structure
 ```
 app
@@ -22,6 +33,8 @@ web
     assets/                     assets files like css, js, and others
 ```
 
+### Tutorial
+Coming soon
 
 [Slim]:http://slimframework.com/
 [Medoo]:http://medoo.in/
