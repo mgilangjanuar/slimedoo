@@ -31,9 +31,6 @@
                 </li>
                 <?php if (App::$user->isSigned()): ?>
                     <li>
-                        <a href="<?= App::url('admin') ?>">Dashboard</a>
-                    </li>
-                    <li>
                         <a href="<?= App::url('site/logout') ?>">Logout (<?= App::$user->Username ?>)</a>
                     </li>
                 <?php else: ?>

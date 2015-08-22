@@ -41,7 +41,7 @@ class SiteController extends \BaseController
         $model->scenario('login');
         if (App::$app->request->post() && $model->validate()) {
             if ($model->login(App::$app->request->post())) {
-                return $this->redirect(['index']);
+                return $this->redirect('admin');
             } else {
                 $this->alert = ['danger' => 'Username/Email or Password wrong.'];
             }
