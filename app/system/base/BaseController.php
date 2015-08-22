@@ -112,14 +112,13 @@ class BaseController extends App
                 $validate = true;
             }
 
-            $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
-            extract($data);
-
-            ob_start();
-            require $__content;
-            ob_end_clean();
-
             if ($validate) {
+                $__content = 'app/views/' . $this->viewDir() . '/' . $__content . (strpos($__content, '.') ? '' : '.php');
+                extract($data);
+
+                ob_start();
+                require $__content;
+                ob_end_clean();
                 require $this->layout;
             } else {
                 return $this->forbidden('You don\'t have access to this content');

@@ -3,7 +3,7 @@
 <head>
     <title><?= $this->title ?> :: <?= App::config()->name ?></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <?php $this->style() ?>
 
@@ -30,6 +30,9 @@
                     <a href="<?= App::url('site/about') ?>">About</a>
                 </li>
                 <?php if (App::$user->isSigned()): ?>
+                    <li>
+                        <a href="<?= App::url('admin') ?>">Dashboard</a>
+                    </li>
                     <li>
                         <a href="<?= App::url('site/logout') ?>">Logout (<?= App::$user->Username ?>)</a>
                     </li>
