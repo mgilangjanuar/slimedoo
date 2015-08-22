@@ -61,7 +61,14 @@ class BaseModel extends App
         $class = new $class;
         $class->where($where);
         return $class;
+    }
 
+    public static function findOne($where=[])
+    {
+        $class = static::className();
+        $class = new $class;
+        $class->where($where);
+        return $class->one();
     }
 
     public function tableName()
@@ -221,12 +228,12 @@ class BaseModel extends App
             }
         }
         if ((! $validate || $this->validate()) && $this->beforeSave()) {
-            $this->afterSave();
             if ($this->isNewRecord()) {
                 $id = App::db()->insert($this->tableName(), $data);
             } else {
                 $id = App::db()->update($this->tableName(), $data, $this->_where);
             }
+            $this->afterSave();
             return $this->where([$this->fields()[0] => $id])->one();
         }
         return false;
