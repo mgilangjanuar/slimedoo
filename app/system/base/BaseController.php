@@ -140,7 +140,7 @@ class BaseController extends App
         }
     }
 
-    public function alert()
+    public function getAlert()
     {
         if ($this->alert != null) {
             foreach ($this->alert as $key => $value) {
@@ -149,7 +149,7 @@ class BaseController extends App
         }
     }
 
-    public function breadcrumb($urlBase='')
+    public function getBreadcrumb($urlBase='')
     {
         if ($this->breadcrumb != null) {
             $result = '<ul class="breadcrumb"><li><a href=' . App::url($urlBase) . '>Home</a></li>';

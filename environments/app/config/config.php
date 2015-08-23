@@ -1,9 +1,7 @@
 <?php
 
 $config = [
-    'dir' => '/slimedoo',
     'name' => 'SliMedoo Framework v2',
-    'defaultFunction' => 'actionIndex',
     'timezone' => 'Asia/Jakarta',
     'db' => [
         'database_type' => 'mysql',

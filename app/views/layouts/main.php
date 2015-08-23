@@ -48,8 +48,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 main-content">
-                        <?= $this->breadcrumb() ?>
-                        <?= $this->alert() ?>
+                        <?= $this->getBreadcrumb() ?>
+                        <?= $this->getAlert() ?>
                         <?php require $__content; ?>
                     </div>
                 </div>

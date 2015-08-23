@@ -100,13 +100,18 @@ class App
     }
 
     /** 
+    * source: http://blog.chapagain.com.np/php-how-to-get-main-or-base-url/
+    *
     * Get absolute URL.
     * @param $value=''
     * @return string
     */ 
     public static function url($value='')
     {
-        return 'http://' . $_SERVER['HTTP_HOST'] . static::config()->dir . ($value != null ? '/' : '') . $value;
+        $pathInfo = pathinfo($_SERVER['PHP_SELF']); 
+        $hostName = $_SERVER['HTTP_HOST']; 
+        $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+        return $protocol.$hostName.$pathInfo['dirname'] . ($value != null ? '/' : '') . $value;
     }
 
     /** 
