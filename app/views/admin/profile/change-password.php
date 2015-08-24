@@ -2,8 +2,8 @@
     use \helpers\Form;
     $this->title = 'Change Password';
     $this->breadcrumb = [
-        'My Profile' => ['index'],
-        $this->title
+        ['label' => 'My Profile', 'url' => ['index']],
+        ['label' => $this->title]
     ];
 ?>
 
@@ -14,8 +14,7 @@
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
 
-    <?php $form = new Form ?>
-    <?= $form->begin() ?>
+    <?= $form = new Form ?>
     <?= $form->password($model, 'Password') ?>
     <?= $form->password($model, 'Password2') ?>
     <?= $form->submitButton('Submit') ?>

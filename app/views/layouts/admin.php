@@ -42,8 +42,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 main-content">
-                        <?= $this->breadcrumb('admin') ?>
-                        <?= $this->alert() ?>
+                        <?= $this->getBreadcrumb('admin') ?>
+                        <?= $this->getAlert() ?>
                         <?php require $__content; ?>
                     </div>
                 </div>

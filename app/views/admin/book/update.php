@@ -2,9 +2,9 @@
     use \helpers\BaseHtml;
     $this->title = 'Update: ' . $model->title;
     $this->breadcrumb = [
-        'Book List' => ['index'],
-        $model->title => ['view/' . $model->id],
-        $this->title
+        ['label' => 'Book List', 'url' => ['index']],
+        ['label' => $model->title, 'url' => ['view', $model->id]],
+        ['label' => $this->title]
     ];
 ?>
 

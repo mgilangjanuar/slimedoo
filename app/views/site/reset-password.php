@@ -1,7 +1,9 @@
 <?php
     use \helpers\Form;
     $this->title = 'Reset Password';
-    $this->breadcrumb = [$this->title];
+    $this->breadcrumb = [
+        ['label' => $this->title]
+    ];
 ?>
 
 <div class="main-title">
@@ -11,8 +13,7 @@
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
 
-    <?php $form = new Form ?>
-    <?= $form->begin() ?>
+    <?= $form = new Form ?>
     <?= $form->inputText($model, 'Email') ?>
     <?= $form->submitButton('Reset Password') ?>
     <?= $form->end() ?>

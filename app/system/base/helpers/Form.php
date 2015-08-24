@@ -9,6 +9,13 @@ class Form extends BaseHtml
 
     public $label = '';
 
+    public $help = '';
+
+    public function __construct($options=[])
+    {
+        $this->begin($options);
+    }
+
     public function begin($options=[])
     {
         if (! array_key_exists('method', $options)) {
@@ -28,13 +35,6 @@ class Form extends BaseHtml
         }
     }
 
-    public function help($value='')
-    {
-        if ($value != null) {
-            return '<span class="help-block">' . $value . '</span>';
-        }
-    }
-
     public function inputText($model, $field, $options=[])
     {
         $this->result = '<div class="form-group">
@@ -42,6 +42,7 @@ class Form extends BaseHtml
                 <div>
                     <input type="text" class="form-control" value="' . $model->$field . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
                     ' . $this->error($model, $field) . '
+                    ' . $this->getHelp() . '
                 </div>
             </div>';
         return $this;
@@ -54,6 +55,7 @@ class Form extends BaseHtml
                 <div>
                     <input type="password" class="form-control" value="' . $model->$field . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
                     ' . $this->error($model, $field) . '
+                    ' . $this->getHelp() . '
                 </div>
             </div>';
         return $this;
@@ -67,6 +69,7 @@ class Form extends BaseHtml
                     <input type="hidden" name="' . $model->tableName() . '[' . $field .']" value="0">
                     <input value="1" type="checkbox"'. ($model->$field == null || $model->$field == 0 ? '' : ' checked ') . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
                     ' . $this->error($model, $field) . '
+                    ' . $this->getHelp() . '
                 </label>
             </div></div>
         </div>';
@@ -80,6 +83,7 @@ class Form extends BaseHtml
             <div>
                 <textarea class="form-control" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '>' . $model->$field . '</textarea>
                 ' . $this->error($model, $field) . '
+                ' . $this->getHelp() . '
             </div>
         </div>';
         return $this;
@@ -100,7 +104,7 @@ class Form extends BaseHtml
             </div>';
         }
 
-        $this->result .= $this->error($model, $field) . '</div></div>';
+        $this->result .= $this->error($model, $field) . $this->getHelp() . '</div></div>';
         return $this;
     }
 
@@ -114,7 +118,7 @@ class Form extends BaseHtml
             $this->result .= '<option value="' . $key . '"' . ($model->$field == $key ? ' selected ' : '') . '>' . $value . '</option>';
         }
 
-        $this->result .= '</select>' . $this->error($model, $field) . '</div></div>';
+        $this->result .= '</select>' . $this->error($model, $field) . $this->getHelp() . '</div></div>';
         return $this;
     }
 
@@ -128,7 +132,7 @@ class Form extends BaseHtml
             $this->result .= '<option value="' . $key . '">' . $value . '</option>';
         }
 
-        $this->result .= '</select>' . $this->error($model, $field) . '</div></div>';
+        $this->result .= '</select>' . $this->error($model, $field) . $this->getHelp() . '</div></div>';
         return $this;
     }
 
@@ -155,6 +159,21 @@ class Form extends BaseHtml
             return $label;
         } else {
             return $model->attributeLabel($field);
+        }
+    }
+
+    public function help($value)
+    {
+        $this->help = $value;
+        return $this;
+    }
+
+    public function getHelp()
+    {
+        if ($this->help != null) {
+            $help = $this->help;
+            $this->help = '';
+            return '<span class="help-block">' . $help . '</span>';
         }
     }
 

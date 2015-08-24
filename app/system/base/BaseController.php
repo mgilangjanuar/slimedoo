@@ -2,9 +2,13 @@
 
 use \App;
 use \Assets;
+use \helpers\Url;
+use \helpers\BaseHtml;
 
 class BaseController extends App
 {
+    public $assets;
+
     public $layout = 'app/views/layouts/main.php';
 
     public $errorLayout = 'app/views/layouts/main.php';
@@ -13,19 +17,16 @@ class BaseController extends App
 
     public $defaultFunction = 'index';
 
-    public $css = [];
-
-    public $cssFile = [];
-
-    public $js = [];
-
-    public $jsFile = [];
-
     public $alert;
 
     public $title;
 
     public $breadcrumb;
+
+    public function __construct()
+    {
+        $this->assets = new Assets;
+    }
 
     public function rules()
     {
@@ -62,7 +63,7 @@ class BaseController extends App
         return $results;
     }
 
-    protected function viewDir()
+    public function viewDir()
     {
         $className = str_replace('\\', '/', static::className());
         $className = str_replace('app/controllers/', '', $className);
@@ -70,7 +71,7 @@ class BaseController extends App
         return $this->dashesFormat($className);
     }
 
-    protected function dashesFormat($value)
+    public function dashesFormat($value)
     {
         // http://stackoverflow.com/questions/10507789/camelcase-to-dash-two-capitals-next-to-each-other
         return strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $value));
@@ -83,7 +84,6 @@ class BaseController extends App
         } else {
             return false;
         }
-
     }
 
     public function render($__content, $data=[])
@@ -128,23 +128,14 @@ class BaseController extends App
 
     public function redirect($url=null)
     {
-        return static::redirectTo($this->siteUrl($url));
-    }
-
-    public function siteUrl($url=null)
-    {
-        if (is_string($url)) {
-            return static::url($url);
-        } elseif (is_array($url)) {
-            return static::url($this->viewDir() . ($url != null ? '/' : '') . $url[0]);
-        }
+        return static::redirectTo(Url::autoDecide($url));
     }
 
     public function getAlert()
     {
         if ($this->alert != null) {
             foreach ($this->alert as $key => $value) {
-                return \helpers\BaseHtml::alert($key, $value);
+                return BaseHtml::alert($key, $value);
             }
         }
     }
@@ -153,11 +144,11 @@ class BaseController extends App
     {
         if ($this->breadcrumb != null) {
             $result = '<ul class="breadcrumb"><li><a href=' . App::url($urlBase) . '>Home</a></li>';
-            foreach ($this->breadcrumb as $key => $value) {
-                if ($key == null) {
-                    $result .= '<li class="active">' . $value . '</li>';
+            foreach ($this->breadcrumb as $value) {
+                if (! array_key_exists('url', $value)) {
+                    $result .= '<li class="active">' . $value['label'] . '</li>';
                 } else {
-                    $result .= '<li><a href="' . $this->siteUrl($value) . '">' . $key . '</a></li>';
+                    $result .= '<li><a href="' . Url::autoDecide($value['url']) . '">' . $value['label'] . '</a></li>';
                 }
             }
             $result .= '</ul>';
@@ -181,13 +172,13 @@ class BaseController extends App
 
     public function style()
     {
-        foreach (Assets::css() as $css) {
-            echo Assets::cssLoad($css);
+        foreach ($this->assets->css() as $css) {
+            echo $this->assets->cssLoad($css);
         }
-        foreach ($this->cssFile as $file) {
-            echo Assets::cssLoad($file);
+        foreach ($this->assets->additionalCssFile as $file) {
+            echo $this->assets->cssLoad($file);
         }
-        foreach ($this->css as $style) {
+        foreach ($this->assets->additionalCss as $style) {
             echo "<style>";
             echo $style;
             echo "</style>";
@@ -196,13 +187,13 @@ class BaseController extends App
 
     public function script()
     {
-        foreach (Assets::js() as $js) {
-            echo Assets::jsLoad($js);
+        foreach ($this->assets->js() as $js) {
+            echo $this->assets->jsLoad($js);
         }
-        foreach ($this->jsFile as $file) {
-            echo Assets::jsLoad($file);
+        foreach ($this->assets->additionalJsFile as $file) {
+            echo $this->assets->jsLoad($file);
         }
-        foreach ($this->js as $script) {
+        foreach ($this->assets->additionalJs as $script) {
             echo "<script>";
             echo $script;
             echo "</script>";
@@ -211,30 +202,22 @@ class BaseController extends App
 
     public function registerCss($css)
     {
-        if (! in_array($css, $this->css)) {
-            $this->css[] = $css;
-        }
+        $this->assets->addCss($css);
     }
 
     public function registerCssFile($css)
     {
-        if (! in_array($css, $this->cssFile)) {
-            $this->cssFile[] = $css;
-        }
+        $this->assets->addCssFile($css);
     }
 
     public function registerJs($js)
     {
-        if (! in_array($js, $this->js)) {
-            $this->js[] = $js;
-        }
+        $this->assets->addJs($js);
     }
 
     public function registerJsFile($js)
     {
-        if (! in_array($js, $this->jsFile)) {
-            $this->jsFile[] = $js;
-        }
+        $this->assets->addJsFile($js);
     }
 
 }

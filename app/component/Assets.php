@@ -2,12 +2,48 @@
 
 class Assets
 {
-    public static function dir()
+    public $additionalCss = [];
+
+    public $additionalCssFile = [];
+    
+    public $additionalJs = [];
+
+    public $additionalJsFile = [];
+
+    public function dir()
     {
         return \App::url('web/assets/');
     }
 
-    public static function css()
+    public function addCss($css)
+    {
+        if (! in_array($css, $this->additionalCss)) {
+            $this->additionalCss[] = $css;
+        }
+    }
+
+    public function addCssFile($css)
+    {
+        if (! in_array($css, $this->additionalCss)) {
+            $this->additionalCssFile[] = $css;
+        }
+    }
+
+    public function addJs($js)
+    {
+        if (! in_array($js, $this->additionalJs)) {
+            $this->additionalJs[] = $js;
+        }
+    }
+
+    public function addJsFile($js)
+    {
+        if (! in_array($js, $this->additionalJs)) {
+            $this->additionalJsFile[] = $js;
+        }
+    }
+
+    public function css()
     {
         return [
             'app/site.css',
@@ -17,7 +53,7 @@ class Assets
         ];
     }
 
-    public static function js()
+    public function js()
     {
         return [
             'jquery/jquery.min.js',
@@ -26,12 +62,12 @@ class Assets
         ];
     }
 
-    public static function cssLoad($location)
+    public function cssLoad($location)
     {
         return '<link rel="stylesheet" href="' . static::dir() . $location . '">';
     }
 
-    public static function jsLoad($location)
+    public function jsLoad($location)
     {
         return '<script src="' . static::dir() . $location . '"></script>';
     }

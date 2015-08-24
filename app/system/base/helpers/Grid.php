@@ -44,7 +44,7 @@ class Grid extends BaseHtml
                     if (array_key_exists('attribute', $data) && $data['attribute'] == ':serialColumn') {
                         $result .= '<td>' . ($serial + 1) . '</td>';
                     } elseif (array_key_exists('attribute', $data) && $data['attribute'] == ':actionColumn') {
-                        $result .= '<td>' . static::actionColumn($row, $data['parameter'][1], $data['parameter'][0]) . '</td>';
+                        $result .= '<td>' . static::actionColumn($row, $data['parameter']) . '</td>';
                     } elseif (array_key_exists('value', $data)) {
                         $result .= '<td>' . $data['value']($row) . '</td>';
                     } else {
@@ -60,11 +60,11 @@ class Grid extends BaseHtml
         return $result;
     }
 
-    public static function actionColumn($model, $param, $url)
+    public static function actionColumn($model, $param)
     {
         return
-            '<a href="'. App::url($url . 'view/' . $model->$param) . '"><i class="glyphicon glyphicon-eye-open"></i></a> 
-            <a href="'. App::url($url . 'update/' . $model->$param) . '"><i class="glyphicon glyphicon-pencil"></i></a> 
-            <a onclick="if (confirm(\'Are you sure want to delete this item?\') == false) return false" href="'. App::url($url . 'delete/' . $model->$param) . '"><i class="glyphicon glyphicon-trash"></i></a>';
+            '<a href="'. Url::autoDecide(['view/' . $model->$param]) . '"><i class="glyphicon glyphicon-eye-open"></i></a> 
+            <a href="'. Url::autoDecide(['update/' . $model->$param]) . '"><i class="glyphicon glyphicon-pencil"></i></a> 
+            <a onclick="if (confirm(\'Are you sure want to delete this item?\') == false) return false" href="'. Url::autoDecide(['delete/' . $model->$param]) . '"><i class="glyphicon glyphicon-trash"></i></a>';
     }
 }

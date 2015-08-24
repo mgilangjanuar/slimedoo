@@ -2,7 +2,9 @@
     use \helpers\BaseHtml;
     use \helpers\Grid;
     $this->title = 'Users';
-    $this->breadcrumb = [$this->title];
+    $this->breadcrumb = [
+        ['label' => $this->title]
+    ];
 ?>
 
 <div class="main-title">
@@ -27,7 +29,7 @@
         ],
         [
             'attribute' => ':actionColumn',
-            'parameter' => ['admin/user/', 'Username'],
+            'parameter' => 'Username',
         ],
     ]
 ]) ?>

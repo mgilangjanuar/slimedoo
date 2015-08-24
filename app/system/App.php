@@ -156,6 +156,24 @@ class App
     }
 
     /**
+    * Get current class.
+    * @return string
+    */
+    public static function activeClass()
+    {
+        return explode(':', static::$app->router()->getCurrentRoute()->getName())[0];
+    }
+
+    /**
+    * Get current function.
+    * @return string
+    */
+    public static function activeFunction()
+    {
+        return explode(':', static::$app->router()->getCurrentRoute()->getName())[1];
+    }
+
+    /**
     * Get array of real path files location in a directory recursively. With
     * real path of directory location in this parameter, you can use path() 
     * function for get it.

@@ -9,7 +9,7 @@ PHP >= 5.3
 ### Usage
 Install via composer, ketik ini di console
 ```
-composer create-project mgilangjanuar/slimedoo:"2.0.0"
+composer create-project mgilangjanuar/slimedoo
 ```
 
 Jika belum install composer, ketik ini di console

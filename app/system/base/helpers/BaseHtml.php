@@ -2,6 +2,7 @@
 namespace helpers;
 
 use \App;
+use \helpers\Url;
 
 class BaseHtml extends App
 {
@@ -13,30 +14,10 @@ class BaseHtml extends App
         }
         return $result;
     }
-
-    public static function urlTo($url)
-    {
-        if (is_string($url)) {
-            if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0 || strpos($url, 'www.') === 0) {
-                return $url;
-            }
-            return App::url($url);
-        } elseif (is_array($url)) {
-            $result = '';
-            foreach ($url as $i => $value) {
-                if ($i == 0) {
-                    $result .= App::url($value);
-                } else {
-                    $result .= '/' . $value;
-                }
-            }
-            return $result;
-        }
-    }
-
+    
     public static function a($text, $url, $options=[])
     {
-        return '<a href="' . static::urlTo($url) . '"' . static::buildOptions($options) . '>' . $text . '</a>';
+        return '<a href="' . Url::autoDecide($url) . '"' . static::buildOptions($options) . '>' . $text . '</a>';
     }
 
     public static function img($url, $options=[])
@@ -44,7 +25,7 @@ class BaseHtml extends App
         if (! array_key_exists('class', $options)) {
             $options['class'] = 'img-responsive';
         }
-        return '<img src="' . static::urlTo($url) . '"' . static::buildOptions($options) . '>';
+        return '<img src="' . Url::autoDecide($url) . '"' . static::buildOptions($options) . '>';
     }
 
     public static function alert($type='', $message='')

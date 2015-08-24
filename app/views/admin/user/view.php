@@ -3,8 +3,8 @@
     use \helpers\Detail;
     $this->title = $model->Username;
     $this->breadcrumb = [
-        'Users' => ['index'],
-        $this->title
+        ['label' => 'Users', 'url' => ['index']],
+        ['label' => $this->title]
     ];
 ?>
 
@@ -15,8 +15,8 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
 
-        <?= BaseHtml::a('Update', $this->siteUrl(['update/' . $model->Username]), ['class' => 'btn btn-warning']) ?>
-        <?= BaseHtml::a('Delete', $this->siteUrl(['delete/' . $model->Username]), [
+        <?= BaseHtml::a('Update', ['update/' . $model->Username], ['class' => 'btn btn-warning']) ?>
+        <?= BaseHtml::a('Delete', ['delete/' . $model->Username], [
             'class' => 'btn btn-danger',
             'onclick' => 'if (confirm(\'Are you sure want to delete this item?\') == false) return false'
         ]) ?>

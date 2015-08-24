@@ -2,8 +2,8 @@
     use \helpers\BaseHtml;
     $this->title = 'Create Book';
     $this->breadcrumb = [
-        'Book List' => ['index'],
-        $this->title
+        ['label' => 'Book List', 'url' => ['index']],
+        ['label' => $this->title]
     ];
 ?>
 

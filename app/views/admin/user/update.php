@@ -3,9 +3,9 @@
     use \helpers\Form;
     $this->title = 'Update: ' . $model->Username;
     $this->breadcrumb = [
-        'Users' => ['index'],
-        $model->Username => ['view/' . $model->Username],
-        $this->title
+        ['label' => 'Users', 'url' => ['index']],
+        ['label' => $model->Username, 'url' => ['view', $model->Username]],
+        ['label' => $this->title]
     ];
 ?>
 
@@ -15,8 +15,7 @@
 
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
-        <?php $form = new Form; ?>
-        <?= $form->begin() ?>
+        <?= $form = new Form; ?>
         <?= $form->inputText($model, 'Username') ?>
         <?= $form->inputText($model, 'Email') ?>
         <?= $form->checkBox($model, 'Activated') ?>

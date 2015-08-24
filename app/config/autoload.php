@@ -35,6 +35,6 @@ foreach (App::autoload(App::path('app/controllers'), '.php') as $appController) 
 foreach (App::autoload(App::path('app/controllers'), '.php') as $controller) {
     $class = '\\' . str_replace('/', '\\', str_replace('.php', '', $controller));
     foreach ((new $class)->routes() as $to => $source) {
-        App::$app->map($to, $source)->via('GET', 'POST');
+        App::$app->map($to, $source)->via('GET', 'POST')->name($source . ':' . $to);
     }
 }

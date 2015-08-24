@@ -12,7 +12,7 @@ $this->title = App::config()->name;
         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
         consequat.
     </p>
-    <?= BaseHtml::a($hai, $this->siteUrl(['index']), ['class' => 'btn btn-success btn-lg', 'id' => 'haiii']) ?>
+    <?= BaseHtml::a($hai, ['index'], ['class' => 'btn btn-success btn-lg', 'id' => 'haiii']) ?>
 </div>
 
 <div class="row">
