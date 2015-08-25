@@ -98,10 +98,9 @@ class User extends \BaseModel
             App::$user->login($input->Username, $input->Password, $input->rememberMe);
             if (App::$user->isSigned()) {
                 return true;
-            } else {
-                return false;
             }
         }
+        return false;
     }
 
     public function register($request, $activation=false)
