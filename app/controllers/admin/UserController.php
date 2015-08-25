@@ -6,8 +6,6 @@ use \app\models\User;
 
 class UserController extends \BaseController
 {
-    public $layout = 'app/views/layouts/admin.php';
-    
     public function rules()
     {
         return [

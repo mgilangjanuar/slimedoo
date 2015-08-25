@@ -1,3 +1,8 @@
+<?php
+    use \helpers\Sidebar;
+    use \helpers\Url;
+?>
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -11,38 +16,63 @@
 <body>
 
     <div id="wrapper">
-        
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars"></i></a>
-                    <a class="navbar-brand" href="<?= App::url() ?>"><?= App::config()->name ?></a>
-                </div>
-            </div>
-        </nav>
 
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <li class="<?= App::activeRoute() == '/' || App::activeRoute() == '/site' || App::activeRoute() == '/site/index' ? 'active' : '' ?>">
-                    <a href="<?= App::url() ?>">Dashboard</a>
-                </li>
-                <li class="<?= App::activeRoute() == '/site/about' ? 'active' : '' ?>">
-                    <a href="<?= App::url('site/about') ?>">About</a>
-                </li>
-                <?php if (App::$user->isSigned()): ?>
-                    <li>
-                        <a href="<?= App::url('site/logout') ?>">Logout (<?= App::$user->Username ?>)</a>
-                    </li>
-                <?php else: ?>
-                    <li class="<?= App::activeRoute() == '/site/login' ? 'active' : '' ?>">
-                        <a href="<?= App::url('site/login') ?>">Login</a>
-                    </li>
-                    <li class="<?= App::activeRoute() == '/site/register' ? 'active' : '' ?>">
-                        <a href="<?= App::url('site/register') ?>">Register</a>
-                    </li>
-                <?php endif ?>
-            </ul>
-        </div>
+        <?php
+            if (App::$user->isSigned()) {
+                $items = [
+                    [
+                        'label' => 'Profile',
+                        'url' => Url::base('admin/profile/index'),
+                        'logo' => 'fa fa-user',
+                        'route' => ['/admin', '/admin/profile', '/admin/profile/index']
+                    ],
+                    [
+                        'label' => 'Users',
+                        'url' => Url::base('admin/user/index'),
+                        'logo' => 'fa fa-users',
+                        'route' => ['/admin/user', '/admin/user/index']
+                    ],
+                    [
+                        'label' => 'Logout (' . App::$user->Username . ')',
+                        'url' => Url::base('site/logout'),
+                        'logo' => 'fa fa-sign-out',
+                    ]
+                ];
+            } else {
+                $items = [
+                    [
+                        'label' => 'Home',
+                        'url' => Url::base(),
+                        'logo' => 'fa fa-home',
+                        'route' => ['/', '/site', '/site/index']
+                    ],
+                    [
+                        'label' => 'About',
+                        'url' => Url::base('site/about'),
+                        'logo' => 'fa fa-info-circle',
+                        'route' => '/site/about'
+                    ],
+                    [
+                        'label' => 'Login',
+                        'url' => Url::base('site/login'),
+                        'logo' => 'fa fa-sign-in',
+                        'route' => '/site/login'
+                    ],
+                    [
+                        'label' => 'Register',
+                        'url' => Url::base('site/register'),
+                        'logo' => 'fa fa-user',
+                        'route' => '/site/register'
+                    ]
+                ];
+            }
+        ?>
+        
+        <?= Sidebar::begin([
+            'label' => App::config()->name,
+            'url' => Url::base(),
+            'items' => $items
+        ]) ?>
 
         <div id="page-content-wrapper">
             <div class="container-fluid">

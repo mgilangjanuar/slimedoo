@@ -6,6 +6,12 @@ use \ptejada\uFlex\Collection;
 
 class User extends \BaseModel
 {
+    public $Password2;
+
+    public $Email2;
+
+    public $rememberMe;
+
     public function tableName()
     {
         return 'Users';
@@ -13,7 +19,7 @@ class User extends \BaseModel
 
     public function fields()
     {
-        return ['ID', 'Username', 'Password', 'Email', 'Activated', 'Confirmation', 'RegDate', 'LastLogin', 'GroupID', 'Password2', 'Email2', 'rememberMe'];
+        return ['ID', 'Username', 'Password', 'Email', 'Activated', 'Confirmation', 'RegDate', 'LastLogin', 'GroupID'];
     }
 
     public function rules()

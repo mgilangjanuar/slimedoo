@@ -30,8 +30,7 @@ class Url extends BaseHtml
     public static function to($url=null)
     {
         $class = App::activeClass();
-        $class = new $class;
-        return App::url($class->viewDir() . ($url != null ? '/' : '') . self::buildUrl($url));
+        return App::url((new $class)->viewDir() . ($url != null ? '/' : '') . self::buildUrl($url));
     }
 
     public static function buildUrl($url=null)

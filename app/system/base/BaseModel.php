@@ -22,6 +22,11 @@ class BaseModel extends App
             foreach ($this->_cols as $key => $value) {
                 $this->_cols[$key] = isset($_POST[$this->tableName()][$key]) ? $_POST[$this->tableName()][$key] : null;
             }
+            foreach (get_object_vars($this) as $key => $value) {
+                if ($key != 'scenario' && $key[0] != '_') {
+                    $this->$key = isset($_POST[$this->tableName()][$key]) ? $_POST[$this->tableName()][$key] : null;
+                }
+            }
             foreach (get_class_methods($this) as $func) {
                 if (substr($func, 0, 3) == 'set') {
                     $attribute = lcfirst(substr($func, 3));
@@ -140,6 +145,12 @@ class BaseModel extends App
         } else {
             $datas = App::db()->get($this->tableName(), '*', $this->_where);
         }
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($key != 'scenario' && $key[0] != '_') {
+                $datas[$key] = $value;
+            }
+        }
+
         foreach (get_class_methods($this) as $funcGet) {
             if (substr($funcGet, 0, 3) == 'get') {
                 $datas[lcfirst(substr($funcGet, 3))] = $this->$funcGet();
@@ -195,6 +206,11 @@ class BaseModel extends App
         }
         foreach ($this->_cols as $key => $value) {
             if (array_key_exists($key, $request[$this->tableName()])) {
+                $this->$key = $request[$this->tableName()][$key];
+            }
+        }
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($key != 'scenario' && $key[0] != '_' && array_key_exists($key, $request[$this->tableName()])) {
                 $this->$key = $request[$this->tableName()][$key];
             }
         }
@@ -273,7 +289,7 @@ class BaseModel extends App
         }
         foreach ($query as $row) {
             foreach ($row as $key => $value) {
-                if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key)) {
+                if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key) || isset($this->$key)) {
                     $this->$key = $value;
                 }
             }
@@ -294,7 +310,7 @@ class BaseModel extends App
         $results = App::db()->get($this->tableName(), '*', $this->_where);
         if ($results != null) {
             foreach ($results as $key => $value) {
-                if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key)) {
+                if (array_key_exists($key, $this->_cols) || method_exists($this, 'set' . $key) || isset($this->$key)) {
                     $this->$key = $value;
                 }
             }

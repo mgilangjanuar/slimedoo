@@ -63,8 +63,8 @@ class Grid extends BaseHtml
     public static function actionColumn($model, $param)
     {
         return
-            '<a href="'. Url::autoDecide(['view/' . $model->$param]) . '"><i class="glyphicon glyphicon-eye-open"></i></a> 
-            <a href="'. Url::autoDecide(['update/' . $model->$param]) . '"><i class="glyphicon glyphicon-pencil"></i></a> 
-            <a onclick="if (confirm(\'Are you sure want to delete this item?\') == false) return false" href="'. Url::autoDecide(['delete/' . $model->$param]) . '"><i class="glyphicon glyphicon-trash"></i></a>';
+            '<a href="'. Url::to(['view/' . $model->$param]) . '"><i class="glyphicon glyphicon-eye-open"></i></a> 
+            <a href="'. Url::to(['update/' . $model->$param]) . '"><i class="glyphicon glyphicon-pencil"></i></a> 
+            <a onclick="if (confirm(\'Are you sure want to delete this item?\') == false) return false" href="'. Url::to(['delete/' . $model->$param]) . '"><i class="glyphicon glyphicon-trash"></i></a>';
     }
 }
