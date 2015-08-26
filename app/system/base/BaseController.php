@@ -7,7 +7,7 @@ use \helpers\BaseHtml;
 
 class BaseController extends App
 {
-    public $assets;
+    public $appAssets;
 
     public $layout = 'app/views/layouts/main.php';
 
@@ -25,7 +25,7 @@ class BaseController extends App
 
     public function __construct()
     {
-        $this->assets = new Assets;
+        $this->appAssets = new \assets\AppAssets;
     }
 
     public function rules()
@@ -172,13 +172,18 @@ class BaseController extends App
 
     public function style()
     {
-        foreach ($this->assets->css() as $css) {
-            echo $this->assets->cssLoad($css);
+        foreach ($this->appAssets->cssFile as $css) {
+            echo $this->appAssets->cssLoad($css);
         }
-        foreach ($this->assets->additionalCssFile as $file) {
-            echo $this->assets->cssLoad($file);
+        foreach (App::$assets->cssFile as $file) {
+            echo $this->appAssets->cssLoad($file);
         }
-        foreach ($this->assets->additionalCss as $style) {
+        foreach ($this->appAssets->css as $style) {
+            echo "<style>";
+            echo $style;
+            echo "</style>";
+        }
+        foreach (App::$assets->css as $style) {
             echo "<style>";
             echo $style;
             echo "</style>";
@@ -187,13 +192,18 @@ class BaseController extends App
 
     public function script()
     {
-        foreach ($this->assets->js() as $js) {
-            echo $this->assets->jsLoad($js);
+        foreach ($this->appAssets->jsFile as $js) {
+            echo $this->appAssets->jsLoad($js);
         }
-        foreach ($this->assets->additionalJsFile as $file) {
-            echo $this->assets->jsLoad($file);
+        foreach (App::$assets->jsFile as $file) {
+            echo $this->appAssets->jsLoad($file);
         }
-        foreach ($this->assets->additionalJs as $script) {
+        foreach ($this->appAssets->js as $script) {
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
+        foreach (App::$assets->js as $script) {
             echo "<script>";
             echo $script;
             echo "</script>";
@@ -202,22 +212,22 @@ class BaseController extends App
 
     public function registerCss($css)
     {
-        $this->assets->addCss($css);
+        $this->appAssets->addCss($css);
     }
 
     public function registerCssFile($css)
     {
-        $this->assets->addCssFile($css);
+        $this->appAssets->addCssFile($css);
     }
 
     public function registerJs($js)
     {
-        $this->assets->addJs($js);
+        $this->appAssets->addJs($js);
     }
 
     public function registerJsFile($js)
     {
-        $this->assets->addJsFile($js);
+        $this->appAssets->addJsFile($js);
     }
 
 }

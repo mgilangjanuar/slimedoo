@@ -2,9 +2,8 @@
 namespace helpers;
 
 use \App;
-use \helpers\BaseHtml;
 
-class Url extends BaseHtml
+class Url
 {
     public static function autoDecide($url=null)
     {

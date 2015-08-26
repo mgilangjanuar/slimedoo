@@ -20,18 +20,24 @@ class App
     */
     public static $mail;
 
+    /**
+    * Object of \Assets
+    */
+    public static $assets;
+
     protected static $db = [];
 
     /** 
     * Main function for initialize this class.
     * @param \Slim\Slim
     */ 
-    public static function init(\Slim\Slim $slim, \ptejada\uFlex\User $user, \PHPMailer $mail)
+    public static function init(\Slim\Slim $slim, \ptejada\uFlex\User $user, \PHPMailer $mail, \Assets $assets)
     {
         static::$db     = static::config()->db;
         static::$user   = $user;
         static::$app    = $slim;
         static::$mail   = $mail;
+        static::$assets = $assets;
 
         static::$user->config->database->host       = static::config()->db['server'];
         static::$user->config->database->user       = static::config()->db['username'];
