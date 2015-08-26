@@ -33,6 +33,7 @@ class UserController extends \BaseController
     public function actionUpdate($username)
     {
         $model = $this->findUser($username);
+        $model->scenario('update-user');
         if ($model->load(App::$app->request->post()) && $model->save()) {
             return $this->redirect(['view/' . $model->Username]);
         }

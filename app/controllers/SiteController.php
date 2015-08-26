@@ -39,7 +39,7 @@ class SiteController extends \BaseController
     {
         $model = new User;
         $model->scenario('login');
-        if (App::$app->request->post() && $model->validate()) {
+        if (App::$app->request->post()) {
             if ($model->login(App::$app->request->post())) {
                 return $this->redirect('admin');
             } else {
@@ -55,7 +55,7 @@ class SiteController extends \BaseController
     {
         $model = new User;
         $model->scenario('register');
-        if (App::$app->request->post() && $model->validate()) {
+        if (App::$app->request->post()) {
             if ($model->register(App::$app->request->post())) {
                 return $this->redirect(['login']);
             } else {
@@ -71,7 +71,7 @@ class SiteController extends \BaseController
     {
         $model = new User;
         $model->scenario('reset-password');
-        if (App::$app->request->post() && $model->validate()) {
+        if (App::$app->request->post()) {
             if ($model->resetPassword(App::$app->request->post())) {
                 $model->Email = '';
                 $this->alert = ['success' => 'Check your email in inbox/spam for confirmation link.'];
@@ -91,7 +91,7 @@ class SiteController extends \BaseController
         }
         $model = new User;
         $model->scenario('new-password');
-        if (App::$app->request->post() && $model->validate()) {
+        if (App::$app->request->post()) {
             if ($model->newPassword(App::$app->request->post(), App::$app->request->get('c'))) {
                 if (App::$user->isSigned()) {
                     App::$user->logout();

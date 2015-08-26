@@ -1,7 +1,6 @@
 <?php
 
 use \App;
-use \Valitron\Validator;
 
 class BaseModel extends App
 {
@@ -112,91 +111,57 @@ class BaseModel extends App
 
     public function rules()
     {
-        return [];
+        return [
+            // [['name'], 'required'],
+            // [['price'], 'max(3)'],
+        ];
+    }
+
+    public function validate($attribute)
+    {
+        $results = [];
+        foreach ($this->scenario as $scene) {
+            if (is_string($scene[0])) {
+                if ($scene[0] == $attribute) {
+                    $results[] = $scene[1];
+                }
+            } else {
+                if (in_array($attribute, $scene[0])) {
+                    $results[] = $scene[1];
+                }
+            }
+        }
+        foreach ($this->rules() as $rule) {
+            if (is_string($rule[0])) {
+                if ($rule[0] == $attribute) {
+                    $results[] = $rule[1];
+                }
+            } else {
+                if (in_array($attribute, $rule[0])) {
+                    $results[] = $rule[1];
+                }
+            }
+        }
+        $result = implode(',', $results);
+        return $result;
+    }
+
+    public function loadCustomValidation()
+    {
+        $result = '';
+        foreach (get_class_methods($this) as $funcRule) {
+            if (substr($funcRule, 0, 4) == 'rule' && $funcRule != 'rules') {
+                $result .= '$.verify.addRules({
+                    '. lcfirst(substr($funcRule, 4)) .': '. $this->$funcRule() .'
+                });';
+            }
+        }
+        return $result;
     }
 
     public function scenario($value)
     {
         return null;
-    }
-
-    public function messages()
-    {
-        return [];
-    }
-
-    protected function loadAllRuleMethods()
-    {
-        foreach (get_class_methods($this) as $funcRule) {
-            if (substr($funcRule, 0, 4) == 'rule' && $funcRule != 'rules') {
-                Validator::addRule(lcfirst(substr($funcRule, 4)), $this->$funcRule()['function'], $this->$funcRule()['message']);
-            }
-        }
-    }
-
-    public function validate()
-    {
-        // Registering custom rules.
-        $this->loadAllRuleMethods();
-
-        // Collect data for validate.
-        if ($this->isNewRecord()) {
-            $datas = $this->_cols;
-        } else {
-            $datas = App::db()->get($this->tableName(), '*', $this->_where);
-        }
-        foreach (get_object_vars($this) as $key => $value) {
-            if ($key != 'scenario' && $key[0] != '_') {
-                $datas[$key] = $value;
-            }
-        }
-
-        foreach (get_class_methods($this) as $funcGet) {
-            if (substr($funcGet, 0, 3) == 'get') {
-                $datas[lcfirst(substr($funcGet, 3))] = $this->$funcGet();
-            }
-        }
-
-        // Insert data to Validator.
-        $validator = new Validator($datas);
-
-        // Get rules from $this->rules() and $this->scenario
-        $rules = $this->rules();
-        if ($this->scenario != null) {
-            $rules[] = $this->scenario;
-        }
-
-        // Insert rule, and fields (and params) to rule method.
-        foreach ($rules as $value) {
-            if (array_key_exists($value[1], $this->messages())) {
-                if (count($value) == 2) {
-                    $validator->rule($value[1], $value[0])->message($this->messages()[$key]);
-                } else {
-                    $validator->rule($value[1], $value[0], $value[2])->message($this->messages()[$key]);
-                }
-            } else {
-                if (count($value) == 2) {
-                    $validator->rule($value[1], $value[0]);
-                } else {
-                    $validator->rule($value[1], $value[0], $value[2]);
-                }
-            }
-
-            // Insert label form all key to validator.
-            $labels = [];
-            foreach (array_keys($datas) as $key) {
-                $labels[$key] = $this->attributeLabel($key);
-            }
-            $validator->labels($labels);
-        }
-
-        // Start validate.
-        if ($validator->validate()) {
-            return true;
-        } else {
-            $this->_errors = $validator->errors();
-            return false;
-        }
     }
 
     public function load($request)
@@ -235,7 +200,7 @@ class BaseModel extends App
         return true;
     }
 
-    public function save($validate=true)
+    public function save()
     {
         $data = [];
         foreach ($this->_cols as $key => $value) {
@@ -243,7 +208,7 @@ class BaseModel extends App
                 $data[$key] = $value;
             }
         }
-        if ((! $validate || $this->validate()) && $this->beforeSave()) {
+        if ($this->beforeSave()) {
             if ($this->isNewRecord()) {
                 $id = App::db()->insert($this->tableName(), $data);
             } else {

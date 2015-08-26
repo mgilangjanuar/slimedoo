@@ -26,24 +26,39 @@ class User extends \BaseModel
     {
         return [
             [['Email', 'Email2'], 'email'],
-            [['RegDate', 'LastLogin', 'GroupID', 'Activated'], 'integer'],
-            [['Activated'], 'lengthMax', 1],
-            [['GroupID'], 'lengthMax', 2],
-            [['Email2'], 'equals', 'Email'],
-            [['Password2'], 'equals', 'Password'],
+            [['RegDate', 'LastLogin', 'GroupID', 'Activated'], 'number'],
+            [['Activated'], 'max(1)'],
+            [['GroupID'], 'max(2)'],
+            [['Email2'], 'equals(Email)'],
+            [['Password2'], 'equals(Password)'],
         ];
+    }
+
+    public function ruleEquals()
+    {
+        return 'function (r)
+        {
+            var parameter = r.args[0];
+            var id = "'.$this->tableName().'" + "-" + parameter;
+            if ($("#" + id).val() != r.val()) {
+                return "Must be equals with " + parameter;
+            }
+            return true;
+        }';
     }
 
     public function scenario($value)
     {
         if ($value == 'login') {
-            $this->scenario = [['Username', 'Password'], 'required'];
+            $this->scenario[] = [['Username', 'Password'], 'required'];
         } elseif ($value == 'register') {
-            $this->scenario = [['Username', 'Password', 'Email', 'Password2'], 'required'];
+            $this->scenario[] = [['Username', 'Password', 'Email', 'Password2'], 'required'];
         } elseif ($value == 'reset-password') {
-            $this->scenario = [['Email'], 'required'];
+            $this->scenario[] = [['Email', 'Email2'], 'required'];
         } elseif ($value == 'new-password') {
-            $this->scenario = [['Password', 'Password2'], 'required'];
+            $this->scenario[] = [['Password', 'Password2'], 'required'];
+        } elseif ($value == 'update-user') {
+            $this->scenario[] = [['Username', 'Email', 'GroupID'], 'required'];
         }
     }
 
