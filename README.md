@@ -8,8 +8,15 @@ PHP >= 5.3
 
 ### Usage
 Install via composer, ketik ini di console
+
+Untuk versi 2.0.1 (menggunakan Valitron sebagai validator form)
 ```
-composer create-project mgilangjanuar/slimedoo
+composer create-project mgilangjanuar/slimedoo:"2.0.1"
+```
+
+Untuk versi 2.0.2 (menggunakan [verifyjs] sebagai validator form)
+```
+composer create-project mgilangjanuar/slimedoo:"2.0.2"
 ```
 
 Jika belum install composer, ketik ini di console
@@ -52,3 +59,4 @@ MIT
 [uFlex]:http://ptejada.com/projects/uFlex
 [PHPMailer]:https://github.com/PHPMailer/PHPMailer
 [yii2]:http://yiiframework.com
+[verifyjs]:http://verifyjs.com
