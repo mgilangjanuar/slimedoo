@@ -15,11 +15,11 @@
 
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
-        <?= $form = new Form($model) ?>
-        <?= $form->inputText('Username') ?>
-        <?= $form->inputText('Email') ?>
-        <?= $form->checkBox('Activated') ?>
-        <?= $form->select('GroupID', $model->dataRoles) ?>
+        <?= $form = new Form ?>
+        <?= $form->inputText($model, 'Username') ?>
+        <?= $form->inputText($model, 'Email') ?>
+        <?= $form->checkBox($model, 'Activated') ?>
+        <?= $form->select($model, 'GroupID', $model->dataRoles) ?>
         <?= $form->submitButton('Update') ?>
     </div>
 </div>

@@ -13,9 +13,9 @@
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
 
-    <?= $form = new Form($model) ?>
-    <?= $form->password('Password') ?>
-    <?= $form->password('Password2') ?>
+    <?= $form = new Form ?>
+    <?= $form->password($model, 'Password') ?>
+    <?= $form->password($model, 'Password2') ?>
     <?= $form->submitButton('Submit') ?>
     <?= $form->end() ?>
 

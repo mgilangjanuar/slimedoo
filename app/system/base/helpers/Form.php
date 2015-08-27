@@ -7,17 +7,13 @@ class Form extends BaseHtml
 {
     public $result = '';
 
-    public $model = null;
-
     public $label = '';
 
     public $help = '';
 
-    public function __construct($model, $options=[])
+    public function __construct($options=[])
     {
-        $this->model = $model;
         App::$assets->addJsFile('verifyjs/verify.min.js');
-        App::$assets->addJs($this->model->loadCustomValidation());
         App::$assets->addJs("
             $.verify({
                 prompt: function(element, text) {
@@ -50,12 +46,13 @@ class Form extends BaseHtml
         return $this;
     }
 
-    public function inputText($field, $options=[])
+    public function inputText($model, $field, $options=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
-            <label class="control-label">' . $this->getLabel($field) . '</label>
+            <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
-                    <input id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'" type="text" class="form-control" value="' . $this->model->$field . '" name="' . $this->model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
+                    <input id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'" type="text" class="form-control" value="' . $model->$field . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
                     <span class="text-danger error"></span>
                     ' . $this->getHelp() . '
                 </div>
@@ -63,12 +60,13 @@ class Form extends BaseHtml
         return $this;
     }
 
-    public function password($field, $options=[])
+    public function password($model, $field, $options=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
-            <label class="control-label">' . $this->getLabel($field) . '</label>
+            <label class="control-label">' . $this->getLabel($model, $field) . '</label>
                 <div>
-                    <input id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'" type="password" class="form-control" value="' . $this->model->$field . '" name="' . $this->model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
+                    <input id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'" type="password" class="form-control" value="' . $model->$field . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '/>
                     <span class="text-danger error"></span>
                     ' . $this->getHelp() . '
                 </div>
@@ -76,25 +74,27 @@ class Form extends BaseHtml
         return $this;
     }
 
-    public function checkBox($field, $options=[])
+    public function checkBox($model, $field, $options=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
             <div class="checkbox"><div>
                 <label>
-                    <input type="hidden" name="' . $this->model->tableName() . '[' . $field .']" value="0">
-                    <input id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'"  value="1" type="checkbox"'. ($this->model->$field == null || $this->model->$field == 0 ? '' : ' checked ') . '" name="' . $this->model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($field) . '
+                    <input type="hidden" name="' . $model->tableName() . '[' . $field .']" value="0">
+                    <input id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'"  value="1" type="checkbox"'. ($model->$field == null || $model->$field == 0 ? '' : ' checked ') . '" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '> ' . $this->getLabel($model, $field) . '
                 </label>
             </div><span class="text-danger error"></span>' . $this->getHelp() . '</div>
         </div>';
         return $this;
     }
 
-    public function textArea($field, $options=[])
+    public function textArea($model, $field, $options=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
-            <label for="textArea" class="control-label">' . $this->getLabel($field) . '</label>
+            <label for="textArea" class="control-label">' . $this->getLabel($model, $field) . '</label>
             <div>
-                <textarea id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'" class="form-control" name="' . $this->model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '>' . $this->model->$field . '</textarea>
+                <textarea id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'" class="form-control" name="' . $model->tableName() . '[' . $field . ']"' . BaseHtml::buildOptions($options) . '>' . $model->$field . '</textarea>
                 <span class="text-danger error"></span>
                 ' . $this->getHelp() . '
             </div>
@@ -102,16 +102,17 @@ class Form extends BaseHtml
         return $this;
     }
 
-    public function radioButton($field, $data, $options=[])
+    public function radioButton($model, $field, $data, $options=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
-            <label class="control-label">' . $this->getLabel($field) . '</label>
+            <label class="control-label">' . $this->getLabel($model, $field) . '</label>
             <div>';
 
         foreach ($data as $key => $value) {
             $this->result .= '<div class="radio"' . BaseHtml::buildOptions($options) . '>
                 <label>
-                    <input id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'" type="radio" name="' . $this->model->tableName() . '[' . $field . ']" value="' . $key . '" checked="">
+                    <input id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'" type="radio" name="' . $model->tableName() . '[' . $field . ']" value="' . $key . '" checked="">
                     ' . $value . '
                 </label>
             </div>';
@@ -120,25 +121,27 @@ class Form extends BaseHtml
         return $this;
     }
 
-    public function select($field, $data, $options=[])
+    public function select($model, $field, $data, $options=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
-        <label class="control-label">' . $this->getLabel($field) . '</label>
-        <div><select id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'" name="' . $this->model->tableName() . '[' . $field .']" class="form-control"' . BaseHtml::buildOptions($options) . '>';
+        <label class="control-label">' . $this->getLabel($model, $field) . '</label>
+        <div><select id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'" name="' . $model->tableName() . '[' . $field .']" class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
         foreach ($data as $key => $value) {
-            $this->result .= '<option value="' . $key . '"' . ($this->model->$field == $key ? ' selected ' : '') . '>' . $value . '</option>';
+            $this->result .= '<option value="' . $key . '"' . ($model->$field == $key ? ' selected ' : '') . '>' . $value . '</option>';
         }
 
         $this->result .= '</select><span class="text-danger error"></span>' . $this->getHelp() . '</div></div>';
         return $this;
     }
 
-    public function selectMultiple($field, $data, $option=[])
+    public function selectMultiple($model, $field, $data, $option=[])
     {
+        $this->registerModel($model);
         $this->result = '<div class="form-group">
-        <label class="control-label">' . $this->getLabel($field) . '</label>
-        <div><select id="'. $this->model->tableName() . '-' . $field .'" data-validate="'. $this->model->validate($field) .'" name="' . $this->model->tableName() . '[' . $field .']" multiple="" class="form-control"' . BaseHtml::buildOptions($options) . '>';
+        <label class="control-label">' . $this->getLabel($model, $field) . '</label>
+        <div><select id="'. $model->tableName() . '-' . $field .'" data-validate="'. $model->validate($field) .'" name="' . $model->tableName() . '[' . $field .']" multiple="" class="form-control"' . BaseHtml::buildOptions($options) . '>';
 
         foreach ($data as $key => $value) {
             $this->result .= '<option value="' . $key . '">' . $value . '</option>';
@@ -163,14 +166,14 @@ class Form extends BaseHtml
         return $this;
     }
 
-    public function getLabel($field)
+    public function getLabel($model, $field)
     {
         if ($this->label != null) {
             $label = $this->label;
             $this->label = '';
             return $label;
         } else {
-            return $this->model->attributeLabel($field);
+            return $model->attributeLabel($field);
         }
     }
 
@@ -192,6 +195,11 @@ class Form extends BaseHtml
     public function end()
     {
         return '</form>';
+    }
+
+    public function registerModel($model)
+    {
+        App::$assets->addJs($model->loadCustomValidation());
     }
 
     public function __toString()

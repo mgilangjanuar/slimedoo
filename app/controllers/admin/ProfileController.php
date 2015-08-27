@@ -26,7 +26,7 @@ class ProfileController extends \BaseController
     {
         $model = new User;
         $model->scenario('new-password');
-        if (App::$app->request->post() && $model->validate()) {
+        if (App::$app->request->post()) {
             if ($model->newPassword(App::$app->request->post())) {
                 if (App::$user->isSigned()) {
                     App::$user->logout();

@@ -13,9 +13,9 @@
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
 
-    <?= $form = new Form($model) ?>
-    <?= $form->inputText('Email') ?>
-    <?= $form->inputText('Email2') ?>
+    <?= $form = new Form ?>
+    <?= $form->inputText($model, 'Email') ?>
+    <?= $form->inputText($model, 'Email2') ?>
     <?= $form->submitButton('Reset Password') ?>
     <?= $form->end() ?>
 
