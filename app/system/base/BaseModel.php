@@ -123,10 +123,7 @@ class BaseModel extends App
 
     public function rules()
     {
-        return [
-            // [['name'], 'required'],
-            // [['price'], 'max(3)'],
-        ];
+        return [];
     }
 
     public function validate($attribute)
