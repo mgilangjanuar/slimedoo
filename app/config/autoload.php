@@ -8,14 +8,7 @@ require 'app/system/Assets.php';
 
 use \App;
 
-App::init(
-    new \Slim\Slim,
-    new \ptejada\uFlex\User,
-    new \PHPMailer,
-    new \Assets
-);
-
-date_default_timezone_set(App::config()->timezone);
+App::init();
 
 foreach (App::autoload(App::path('app/system/base'), '.php') as $systemClass) {
     require $systemClass;

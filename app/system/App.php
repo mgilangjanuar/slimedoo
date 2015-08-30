@@ -31,13 +31,15 @@ class App
     * Main function for initialize this class.
     * @param \Slim\Slim
     */ 
-    public static function init(\Slim\Slim $slim, \ptejada\uFlex\User $user, \PHPMailer $mail, \Assets $assets)
+    public static function init()
     {
+        date_default_timezone_set(static::config()->timezone);
+
         static::$db     = static::config()->db;
-        static::$user   = $user;
-        static::$app    = $slim;
-        static::$mail   = $mail;
-        static::$assets = $assets;
+        static::$user   = new \ptejada\uFlex\User;
+        static::$app    = new \Slim\Slim;
+        static::$mail   = new \PHPMailer;
+        static::$assets = new \Assets;
 
         static::$user->config->database->host       = static::config()->db['server'];
         static::$user->config->database->user       = static::config()->db['username'];

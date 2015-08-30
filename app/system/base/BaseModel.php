@@ -10,8 +10,6 @@ class BaseModel extends App
 
     protected $_where = [];
 
-    protected $_errors = [];
-
     protected $_join = [];
 
     public function __construct()
@@ -82,7 +80,21 @@ class BaseModel extends App
 
     public function fields()
     {
-        return [];
+        if ($this->tableName() != null) {
+            $fields = [];
+            $datas = $query = App::db()->query("SHOW columns FROM " . $this->tableName() . ";")->fetchAll();
+            foreach ($datas as $data) {
+                if ($data['Key'] == 'PRI') {
+                    $fields[] = $data['Field'];
+                }
+            }
+            foreach ($datas as $data) {
+                if (! in_array($data['Field'], $fields)) {
+                    $fields[] = $data['Field'];
+                }
+            }
+            return $fields;
+        }
     }
 
     public function attributeLabel($attribute)
@@ -279,8 +291,9 @@ class BaseModel extends App
                     $this->$key = $value;
                 }
             }
+            return $this;
         }
-        return $this;
+        return null;
     }
 
     public function beforeDelete()
@@ -326,26 +339,20 @@ class BaseModel extends App
         return $this->_where == null;
     }
 
-    public function hasErrors()
-    {
-        return $this->_errors != null;
-    }
-
-    public function errors()
-    {
-        if ($this->hasErrors()) {
-            return $this->_errors;
-        }
-        return false;
-    }
-
     public function hasMany($class, $datas)
     {
-        $where = [];
-        foreach ($datas as $key => $value) {
-            $where[$key] = $this->$value;
+        if (! isset($datas[0]) && ! isset($datas[1]) && ! isset($datas[2])) {
+            $where = [];
+            foreach ($datas as $key => $value) {
+                $where[$key] = $this->$value;
+            }
+            return $class::find($where)->all();
+        } else {
+            $_pri = $this->fields()[0];
+            $query = App::db()->select($datas[0], $datas[2], [$datas[1] => $this->$_pri]);
+            $_class = new $class;
+            return $class::find([$_class->fields()[0] => $query])->all();
         }
-        return $class::find()->where($where);
     }
 
     public function hasOne($class, $datas)
@@ -355,6 +362,27 @@ class BaseModel extends App
             $where[$key] = $this->$value;
         }
         return $class::find()->where($where)->one();
+    }
+
+    public function link($class, $datas, $options=[])
+    {
+        if (count($datas) < 3) {
+            $class->$datas[1] = $this->$datas[0];
+            foreach ($options as $key => $value) {
+                $class->$key = $value;
+            }
+        } else {
+            $fromId = $this->fields()[0];
+            $destId = $class->fields()[0];
+            $data = [];
+            $data[$datas[1]] = $this->$fromId;
+            $data[$datas[2]] = $class->$destId;
+            foreach ($options as $key => $value) {
+                $data[$key] = $value;
+            }
+            App::db()->insert($datas[0], $data);
+        }
+        return $class;
     }
 
     public function timestampBehaviour()

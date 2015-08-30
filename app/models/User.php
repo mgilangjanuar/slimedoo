@@ -17,11 +17,6 @@ class User extends \BaseModel
         return 'Users';
     }
 
-    public function fields()
-    {
-        return ['ID', 'Username', 'Password', 'Email', 'Activated', 'Confirmation', 'RegDate', 'LastLogin', 'GroupID'];
-    }
-
     public function rules()
     {
         return [
