@@ -16,7 +16,7 @@ composer create-project mgilangjanuar/slimedoo:"2.0.1"
 
 Untuk versi 2.0.2 (menggunakan [verifyjs] sebagai validator form)
 ```
-composer create-project mgilangjanuar/slimedoo:"2.0.2"
+composer create-project mgilangjanuar/slimedoo:"2.0.3"
 ```
 
 Jika belum install composer, ketik ini di console
