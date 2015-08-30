@@ -28,6 +28,14 @@ class SiteController extends \BaseController
         return $this->render('about');
     }
 
+    // This optional. Only override for custom routes.
+    public function routes()
+    {
+        $results = parent::routes();
+        $results['/'] = self::className() . ':actionIndex';
+        return $results;
+    }
+
 
     /**
     *
@@ -110,13 +118,5 @@ class SiteController extends \BaseController
     {
         App::$user->logout();
         return $this->redirect(['login']);
-    }
-
-    // This optional. Only override this method for custom routes.
-    public function routes()
-    {
-        $results = parent::routes();
-        $results['/'] = static::className() . ':actionIndex';
-        return $results;
     }
 }
