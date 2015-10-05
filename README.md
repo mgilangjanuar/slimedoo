@@ -14,9 +14,9 @@ Untuk versi 2.0.1 (menggunakan Valitron sebagai validator form)
 composer create-project mgilangjanuar/slimedoo:"2.0.1"
 ```
 
-Untuk versi 2.0.2 (menggunakan [verifyjs] sebagai validator form)
+Untuk current version (menggunakan [verifyjs] sebagai validator form)
 ```
-composer create-project mgilangjanuar/slimedoo:"2.0.3"
+composer create-project mgilangjanuar/slimedoo
 ```
 
 Jika belum install composer, ketik ini di console
@@ -48,7 +48,7 @@ web
 ```
 
 ### Tutorial
-Coming soon
+[Simple Guide](https://github.com/mgilangjanuar/slimedoo/wiki)
 
 ### License
 MIT
