@@ -26,6 +26,7 @@ curl -sS https://getcomposer.org/installer | php
 
 Setelah itu pindahkan isi folder environments/app/* ke app/ dan lakukan beberapa konfigurasi file berikut:
 
+* update composer (gunakan perintah ```composer update``` pada console).
 * config.php (sesuaikan dengan konfigurasi database Anda dll).
 * mail.php (optional, pada base app konfigurasi ini hanya digunakan untuk implementasi forgot password).
 * params.php (optional, bila menggunakan plugin lain yang perlu menginitialisasi value tertentu, akses dengan cara \App::params()).
